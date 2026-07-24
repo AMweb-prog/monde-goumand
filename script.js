@@ -275,7 +275,7 @@ const PRODUCTS = [
   { id: 21, name: 'gateau glacé', img: 'images/gateau/newyear.webp', price: 150, cat: 'gateau', desc: ' a partir de', promo: false, isNew: true },
   { id: 23, name: 'SPRING BLUE MOJITO', img: 'images/cocktail/SPRINGBLUEMOJITO.WEBP', price: 45, cat: 'boisson', desc: 'SPRING BLUE', promo: false, isNew: false },
   { id: 24, name: 'cake design', img: 'images/gateau/goodluck.webp', price: 200, cat: 'gateau', desc: 'a partir de ', promo: false, isNew: false },
-  { id: 25, name: "gateau amande", img: "images/gateau/coeurd'amour.webp", price: 200, cat: 'gateau', desc: "a partir de", promo: false, isNew: false },
+  { id: 25, name: "gateau amande", img: "images/gateau/mariage2.webp", price: 200, cat: 'gateau', desc: "a partir de", promo: false, isNew: false },
   { id: 26, name: "buche new year'", img: "images/gateau/buchedamour.webp", price: 200, cat: 'gateau', desc: "a partir de", promo: false, isNew: false },
   { id: 27, name: "CAKE DESIGN BIRTHDAY", img: "images/gateau/birthday.webp", price: 200, cat: 'gateau', desc: " a partir de", promo: false, isNew: false },
   { id: 28, name: "cake design mariage", img: "images/gateau/mariage.webp", price: 200, cat: 'gateau', desc: "a partir de", promo: false, isNew: false },
