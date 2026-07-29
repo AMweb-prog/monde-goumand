@@ -85,6 +85,24 @@ function changeQty(id, d) {
 }
 refreshBadges();
 
+const mgDb = window.createMGClient ? window.createMGClient() : null;
+function mgHasSupabase() { return Boolean(mgDb); }
+function mgEsc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+}
+function mgProductId(value) {
+  return String(value ?? '').replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+}
+async function mgInsert(table, payload) {
+  if (!mgHasSupabase()) return { skipped: true };
+  const { error } = await mgDb.from(table).insert(payload);
+  if (error) {
+    console.warn('Supabase insert failed:', error.message);
+    return { error };
+  }
+  return { ok: true };
+}
+
 /* ── TOAST ───────────────────────────────────────────────── */
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -258,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 /* ── PRODUCTS ────────────────────────────────────────────── */
-const PRODUCTS = [
+const DEFAULT_PRODUCTS = [
   { id: 1, name: ' NEW YEAR', img: 'images/gateau/bucherouge.webp', price: 150, cat: 'gateau', desc: ' a partir de ', promo: false, isNew: false },
   { id: 2, name: 'buche fouret noir', img: 'images/gateau/noel3.webp', price: 150, cat: 'gateau', desc: 'a partir de', promo: true, isNew: false },
   { id: 3, name: "trompe l'oeil citron", img: 'images/pat/citron.webp', price: 24, cat: 'patisserie', desc: 'citron', promo: false, isNew: false },
@@ -305,11 +323,14 @@ const PRODUCTS = [
   { id: 55, name: 'MILKSHAKE VANILLE', img: 'images/MILKSHAKE/milkshakevanille.webp', price: 28, cat: 'boisson', desc: 'VANILLE', promo: false, isNew: false },
 
 ];
+let PRODUCTS = DEFAULT_PRODUCTS.slice();
+let activeProductCat = 'all';
 
 function renderProducts(cat) {
   const grid = document.getElementById('pgrid');
   if (!grid) return;
-  const list = cat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === cat);
+  activeProductCat = cat || activeProductCat || 'all';
+  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeProductCat);
   if (!list.length) { grid.innerHTML = '<div class="empty-st">Aucun produit dans cette catégorie.</div>'; return; }
   grid.innerHTML = list.map((p, i) => `<div class="pcard" style="animation-delay:${i * 50}ms">${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}<div class="pimg" onclick="openLB(${p.id})"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"><div class="pimg-ov"><span class="pimg-zoom">🔍</span></div></div><div class="pbody"><div class="pname">${p.name}</div><div class="pdesc">${p.desc}</div><div class="pfoot"><span class="pprice">${p.price} Dh</span><button class="padd" id="pa${p.id}" onclick="doAdd(${p.id})">+ Panier</button></div></div></div>`).join('');
 }
@@ -321,13 +342,43 @@ document.querySelectorAll('.fb').forEach(b => b.addEventListener('click', functi
 }));
 
 function doAdd(id) {
-  const p = PRODUCTS.find(x => x.id === id); if (!p) return;
+  const p = PRODUCTS.find(x => String(x.id) === String(id)); if (!p) return;
   addToCart({ id: p.id, name: p.name, emoji: '🎂', price: p.price, desc: p.desc });
   const btn = document.getElementById('pa' + id);
   if (btn) { btn.textContent = '✓ Ajouté'; btn.classList.add('ok'); setTimeout(() => { btn.textContent = '+ Panier'; btn.classList.remove('ok'); }, 1800); }
 }
 
 /* ── LIGHTBOX PRODUITS CORRIGÉE (IMAGE + ZOOM) ───────────── */
+function renderProducts(cat) {
+  const grid = document.getElementById('pgrid');
+  if (!grid) return;
+  activeProductCat = cat || activeProductCat || 'all';
+  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeProductCat);
+  if (!list.length) {
+    grid.innerHTML = '<div class="empty-st">Aucun produit dans cette categorie.</div>';
+    return;
+  }
+  grid.innerHTML = list.map((p, i) => {
+    const id = mgProductId(p.id);
+    return `<div class="pcard" style="animation-delay:${i * 50}ms">
+      ${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}
+      ${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}
+      <div class="pimg" onclick="openLB('${id}')">
+        <img src="${mgEsc(p.img)}" alt="${mgEsc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <div class="pimg-ov"><span class="pimg-zoom">+</span></div>
+      </div>
+      <div class="pbody">
+        <div class="pname">${mgEsc(p.name)}</div>
+        <div class="pdesc">${mgEsc(p.desc)}</div>
+        <div class="pfoot">
+          <span class="pprice">${mgEsc(p.price)} Dh</span>
+          <button class="padd" id="pa${id}" onclick="doAdd('${id}')">+ Panier</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function closeLB() {
   const lb = document.getElementById('lb');
   if (lb) lb.classList.remove('on');
@@ -358,7 +409,7 @@ function closeMenuImg() {
 function openLB(id) {
   console.log('openLB appelé avec id:', id);
   
-  const p = PRODUCTS.find(x => x.id === id);
+  const p = PRODUCTS.find(x => String(x.id) === String(id));
   if (!p) {
     console.error('Produit non trouvé:', id);
     return;
@@ -418,7 +469,159 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') { closeLB(); closeMenuImg(); }
 });
 
+function normalizeProduct(row) {
+  return {
+    id: row.legacy_id || row.id,
+    name: row.name || '',
+    img: row.image_url || 'images/logo.webp',
+    price: Number(row.price || 0),
+    cat: row.category || 'gateau',
+    desc: row.description || '',
+    promo: Boolean(row.is_promo),
+    isNew: Boolean(row.is_new)
+  };
+}
+
+function renderDynamicMenu(rows, categories) {
+  const section = document.querySelector('#page-menu .menu-page-sec');
+  if (!section || !rows.length) return;
+  let dyn = document.getElementById('supabaseMenuCategories');
+  if (!dyn) {
+    dyn = document.createElement('div');
+    dyn.id = 'supabaseMenuCategories';
+  }
+  const firstCategory = section.querySelector(':scope > .menu-category');
+  const directCta = Array.from(section.children).find(el => el.classList?.contains('menu-cta'));
+  section.insertBefore(dyn, firstCategory || directCta || null);
+  dyn.style.display = 'block';
+  section.querySelectorAll(':scope > .menu-category').forEach(el => { el.style.display = 'none'; });
+  const groups = rows.reduce((acc, row) => {
+    const key = row.category || 'Menu';
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(row);
+    return acc;
+  }, {});
+  const orderMap = new Map((categories || []).filter(cat => cat.collection === 'menu').map(cat => [cat.name, Number(cat.sort_order || 100)]));
+  const orderedCategories = Object.keys(groups).sort((a, b) => {
+    const byOrder = (orderMap.get(a) ?? 1000) - (orderMap.get(b) ?? 1000);
+    return byOrder || a.localeCompare(b);
+  });
+  dyn.innerHTML = orderedCategories.map((category, idx) => `<div class="menu-category rv in ${idx % 3 === 1 ? 'd1' : idx % 3 === 2 ? 'd2' : ''}">
+    <div class="menu-cat-header">
+      <span class="menu-cat-icon">MG</span>
+      <h3 class="menu-cat-title">${mgEsc(category)}</h3>
+      <div class="menu-cat-line"></div>
+    </div>
+    <div class="menu-items-grid">
+      ${groups[category].map(item => `<div class="menu-item ${item.is_promo ? 'menu-item--promo' : ''} ${item.is_new ? 'menu-item--new' : ''}">
+        <img class="menu-thumb" src="${mgEsc(item.image_url || 'images/logo.webp')}" alt="${mgEsc(item.name)}" onclick="openMenuImg(this,'${mgProductId(item.name)}')">
+        <div class="menu-item-info"><span class="menu-item-name">${mgEsc(item.name)}</span><span class="menu-item-desc">${mgEsc(item.description || '')}</span></div>
+        <span class="menu-item-price">${mgEsc(item.price)} Dh</span>
+      </div>`).join('')}
+    </div>
+  </div>`).join('');
+  setTimeout(doReveal, 80);
+}
+
+async function loadPublicProducts() {
+  if (!mgHasSupabase()) return;
+  const [productsResult, categoriesResult] = await Promise.all([
+    mgDb
+      .from('products')
+      .select('*')
+      .eq('is_active', true)
+      .order('collection', { ascending: true })
+      .order('category', { ascending: true })
+      .order('sort_order', { ascending: true }),
+    mgDb
+      .from('product_categories')
+      .select('*')
+      .eq('is_active', true)
+      .order('collection', { ascending: true })
+      .order('sort_order', { ascending: true })
+  ]);
+  const data = productsResult.data || [];
+  if (productsResult.error || !data.length) return;
+  const categories = categoriesResult.data || [];
+  const gateaux = data.filter(row => row.collection === 'gateau').map(normalizeProduct);
+  if (gateaux.length) {
+    PRODUCTS = gateaux;
+    renderProducts(activeProductCat);
+  }
+  renderDynamicMenu(data.filter(row => row.collection === 'menu'), categories);
+}
+
 renderProducts('all');
+loadPublicProducts();
+
+function enhanceOrderForm() {
+  const form = document.querySelector('#cartLayout .oform');
+  if (!form || form.querySelector('#orderTypeGroup')) return;
+  const firstRow = form.querySelector('.frow');
+  if (!firstRow) return;
+  firstRow.insertAdjacentHTML('afterend', `<div class="ffield order-mode-field" id="orderTypeGroup">
+    <label class="flabel">Mode de commande</label>
+    <div class="order-mode-options">
+      <label class="order-mode-option"><input type="radio" name="orderFulfillment" value="sur_place"><span>Sur place</span></label>
+      <label class="order-mode-option"><input type="radio" name="orderFulfillment" value="a_emporter"><span>A emporter</span></label>
+      <label class="order-mode-option"><input type="radio" name="orderFulfillment" value="livraison" checked><span>Livraison</span></label>
+    </div>
+  </div>`);
+  const modeField = document.getElementById('orderTypeGroup');
+  modeField.insertAdjacentHTML('afterend', `<div class="order-schedule-grid" id="orderScheduleGroup">
+    <div class="ffield">
+      <label class="flabel">Date souhaitée</label>
+      <div class="finput-wrap"><input class="finput" id="orderDate" type="date"><div class="finput-line"></div></div>
+    </div>
+    <div class="ffield">
+      <label class="flabel">Heure souhaitée</label>
+      <div class="finput-wrap"><input class="finput" id="orderTime" type="time"><div class="finput-line"></div></div>
+    </div>
+  </div>`);
+  const subtitle = form.querySelector('.oform-subtitle');
+  if (subtitle) subtitle.textContent = 'Choisissez le mode puis completez vos coordonnees';
+  const title = form.querySelector('.oform-title');
+  if (title) title.textContent = 'Informations de commande';
+  const telLabel = document.getElementById('tel')?.closest('.ffield')?.querySelector('.flabel');
+  if (telLabel) telLabel.textContent = 'Téléphone';
+  const submitBtn = form.querySelector('.wa-btn');
+  if (submitBtn) {
+    submitBtn.classList.add('order-submit-btn');
+    submitBtn.innerHTML = '<span>Valider ma commande</span>';
+  }
+  const secure = form.querySelector('.oform-secure');
+  if (secure) secure.textContent = 'Commande envoyée au dashboard · Kénitra, Maroc';
+  const dateInput = document.getElementById('orderDate');
+  if (dateInput) dateInput.min = new Date().toISOString().slice(0, 10);
+  document.querySelectorAll('input[name="orderFulfillment"]').forEach(input => input.addEventListener('change', syncOrderFields));
+  syncOrderFields();
+}
+
+function getOrderMode() {
+  return document.querySelector('input[name="orderFulfillment"]:checked')?.value || 'livraison';
+}
+
+function syncOrderFields() {
+  const mode = getOrderMode();
+  const addressField = document.getElementById('ad')?.closest('.ffield');
+  const addressInput = document.getElementById('ad');
+  const scheduleGroup = document.getElementById('orderScheduleGroup');
+  const dateInput = document.getElementById('orderDate');
+  const timeInput = document.getElementById('orderTime');
+  const isDelivery = mode === 'livraison';
+  if (addressField) addressField.style.display = isDelivery ? '' : 'none';
+  if (addressInput) addressInput.required = isDelivery;
+  if (scheduleGroup) scheduleGroup.style.display = isDelivery ? 'none' : 'grid';
+  if (dateInput) dateInput.required = !isDelivery;
+  if (timeInput) timeInput.required = !isDelivery;
+}
+
+function getOrderSchedule() {
+  return {
+    date: document.getElementById('orderDate')?.value || null,
+    time: document.getElementById('orderTime')?.value || null
+  };
+}
 
 /* PANIER */
 function renderCart() {
@@ -430,20 +633,36 @@ function renderCart() {
   const items = cart.map((it, idx) => `<div class="ci" style="animation-delay:${idx * 55}ms"><div class="ci-thumb">${it.emoji || '🎂'}</div><div class="ci-info"><div class="ci-name">${it.name}</div><div class="ci-unit">${it.price} Dh / unité</div></div><div class="ci-qty"><button class="qbtn" onclick="doQty('${it.id}',-1)">−</button><span class="qnum">${it.qty}</span><button class="qbtn" onclick="doQty('${it.id}',1)">+</button></div><div class="ci-total">${it.price * it.qty} Dh</div><button class="ci-del" title="Supprimer" onclick="doDel('${it.id}')">✕</button></div>`).join('');
   const lines = cart.map(i => `<div class="csum-line"><span class="csl-label">${i.name} ×${i.qty}</span><span class="csl-val">${i.price * i.qty} Dh</span></div>`).join('');
   layout.innerHTML = `<div><div class="ci-head"><h2 class="ci-title">Articles sélectionnés</h2><span class="ci-count">${qty} article${qty > 1 ? 's' : ''}</span></div>${items}</div><aside class="csummary"><div class="csum-title">Résumé de commande</div>${lines}<hr class="csum-sep"><div class="csum-total"><span class="cst-label">Total</span><span class="cst-val">${total} Dh</span></div><form class="oform" onsubmit="return false"><div class="oform-header"><div class="oform-ornament">✦</div><div class="oform-title">Informations de Livraison</div><div class="oform-subtitle">Complétez vos coordonnées pour finaliser</div></div><div class="frow"><div class="ffield"><label class="flabel">Prénom</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input class="finput" id="fn" placeholder="Votre prénom" required><div class="finput-line"></div></div></div><div class="ffield"><label class="flabel">Nom</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input class="finput" id="ln" placeholder="Votre nom" required><div class="finput-line"></div></div></div></div><div class="ffield"><label class="flabel">Adresse complète</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><input class="finput" id="ad" placeholder="Rue, quartier, numéro…" required><div class="finput-line"></div></div></div><div class="ffield"><label class="flabel">Téléphone WhatsApp</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg><input class="finput" id="tel" type="tel" placeholder="+212 6XX XXX XXX" required><div class="finput-line"></div></div></div><button class="wa-btn" onclick="sendWA()"><span class="wa-btn-bg"></span><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span>Envoyer ma commande</span><svg class="wa-btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button><div class="oform-secure"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Commande sécurisée · Kénitra, Maroc</div></form></aside>`;
+  enhanceOrderForm();
 }
 function doQty(id, d) { changeQty(id, d); renderCart(); }
 function doDel(id) { removeFromCart(id); renderCart(); }
-function sendWA() {
+async function sendWA() {
   const fn = document.getElementById('fn')?.value?.trim() || '';
   const ln = document.getElementById('ln')?.value?.trim() || '';
   const ad = document.getElementById('ad')?.value?.trim() || '';
   const tel = document.getElementById('tel')?.value?.trim() || '';
-  if (!fn || !ln || !ad || !tel) { showToast('⚠️ Veuillez remplir tous les champs'); return; }
+  const orderMode = getOrderMode();
+  const needsAddress = orderMode === 'livraison';
+  const schedule = getOrderSchedule();
+  if (!fn || !ln || !tel || (needsAddress && !ad)) { showToast('⚠️ Veuillez remplir tous les champs'); return; }
+  if (!needsAddress && (!schedule.date || !schedule.time)) { showToast('⚠️ Veuillez choisir la date et l’heure'); return; }
   if (!cart?.length) { showToast('⚠️ Votre panier est vide'); return; }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const lines = cart.map(i => `• ${i.name} ×${i.qty} = ${i.price * i.qty} Dh`).join('%0A');
-  const msg = `🎂 *COMMANDE — MONDE GOURMAND*%0A%0A👤 *Client :* ${fn} ${ln}%0A📍 *Adresse :* ${ad}%0A📞 *Tél :* ${tel}%0A%0A🛒 *Produits :*%0A${lines}%0A%0A💰 *TOTAL : ${total} Dh*%0A%0AMerci de confirmer ma commande 🙏`;
-  window.open(`https://wa.me/212663787499?text=${msg}`, '_blank');
+  const result = await mgInsert('orders', {
+    order_type: orderMode,
+    customer_first_name: fn,
+    customer_last_name: ln,
+    phone: tel,
+    address: needsAddress ? ad : '',
+    scheduled_date: needsAddress ? null : schedule.date,
+    scheduled_time: needsAddress ? null : schedule.time,
+    items: cart.map(i => ({ id: i.id, name: i.name, price: i.price, qty: i.qty, subtotal: i.price * i.qty })),
+    total,
+    source: 'site'
+  });
+  if (result.skipped) { showToast('⚠️ Configuration Supabase manquante'); return; }
+  if (result.error) { showToast('⚠️ Commande non envoyée'); return; }
   showConfirmPopup();
 }
 
@@ -458,7 +677,7 @@ function closeConfirmPopup() {
 }
 
 /* ── RÉSERVATION D'ÉVÉNEMENT (page À propos) ────────────── */
-function sendReservationWA() {
+async function sendReservationWA() {
   const nom = document.getElementById('rNom')?.value?.trim() || '';
   const tel = document.getElementById('rTel')?.value?.trim() || '';
   const date = document.getElementById('rDate')?.value || '';
@@ -467,10 +686,19 @@ function sendReservationWA() {
   const prsn = document.getElementById('rPrsn')?.value || '';
   const table = document.getElementById('rTable')?.value?.trim() || '';
   if (!nom || !tel || !date || !heure || !type || !prsn) { showToast('⚠️ Veuillez remplir tous les champs'); return; }
-  const dateFmt = new Date(date + 'T00:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric' });
-  const msg = `🎉 *RÉSERVATION ÉVÉNEMENT — MONDE GOURMAND*%0A%0A👤 *Nom :* ${nom}%0A📞 *Tél :* ${tel}%0A📅 *Date :* ${dateFmt}%0A🕐 *Heure :* ${heure}%0A🎊 *Type d'événement :* ${type}%0A👥 *Nombre de personnes :* ${prsn}%0A🍽️ *Table souhaitée :* ${table || 'À définir'}%0A%0AMerci de confirmer ma réservation 🙏`;
-  window.open(`https://wa.me/212663787499?text=${msg}`, '_blank');
-  showToast('✓ Réservation envoyée par WhatsApp');
+  const result = await mgInsert('event_reservations', {
+    customer_name: nom,
+    phone: tel,
+    event_date: date,
+    event_time: heure,
+    event_type: type,
+    guests: Number(prsn),
+    table_note: table,
+    source: 'site'
+  });
+  if (result.skipped) { showToast('⚠️ Configuration Supabase manquante'); return; }
+  if (result.error) { showToast('⚠️ Réservation non envoyée'); return; }
+  showToast('✓ Réservation envoyée au dashboard');
 }
 renderCart();
 

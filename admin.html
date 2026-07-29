@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Monde Gourmand Admin</title>
+  <link rel="icon" type="image/webp" href="images/logo.webp">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="side-rail">
+      <a class="brand" href="admin.html" aria-label="Monde Gourmand Admin">
+        <img src="images/logo.webp" alt="Monde Gourmand">
+        <span>Monde<br>Gourmand</span>
+      </a>
+      <nav class="side-nav" aria-label="Navigation admin">
+        <button class="nav-item is-active" data-view="overview">Vue</button>
+        <button class="nav-item" data-view="orders">Commandes</button>
+        <button class="nav-item" data-view="reservations">Evenements</button>
+        <button class="nav-item" data-view="products">Produits</button>
+      </nav>
+      <button class="ghost-btn" id="refreshBtn" type="button">Actualiser</button>
+      <button class="ghost-btn danger" id="logoutBtn" type="button">Sortir</button>
+    </aside>
+
+    <main class="workspace">
+      <section class="auth-screen" id="authScreen">
+        <div class="auth-card">
+          <span class="eyebrow">Administration</span>
+          <h1>Monde Gourmand</h1>
+          <p>Connectez-vous avec un compte autorisé.</p>
+          <form id="loginForm" class="auth-form">
+            <label>Email<input id="loginEmail" type="email" autocomplete="email" required></label>
+            <label>Mot de passe<input id="loginPassword" type="password" autocomplete="current-password" required></label>
+            <button class="primary-btn" type="submit">Connexion</button>
+          </form>
+          <p class="system-note" id="configWarning"></p>
+        </div>
+      </section>
+
+      <section class="app-screen is-hidden" id="appScreen">
+        <header class="topbar">
+          <div>
+            <span class="eyebrow">Operations live</span>
+            <h1 class="scrub-title">Dashboard admin</h1>
+          </div>
+          <div class="operator-card">
+            <span id="operatorEmail">Admin</span>
+            <small id="lastSync">Pas encore synchronise</small>
+          </div>
+        </header>
+
+        <section class="metrics-bento" id="metricsBento">
+          <article class="metric-card span-2">
+            <span>Commandes du jour</span>
+            <strong id="metricOrdersToday">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Livraison</span>
+            <strong id="metricDelivery">0</strong>
+          </article>
+          <article class="metric-card">
+            <span>Sur place</span>
+            <strong id="metricOnSite">0</strong>
+          </article>
+          <article class="metric-card span-2">
+            <span>Reservations evenements</span>
+            <strong id="metricReservations">0</strong>
+          </article>
+          <article class="metric-card span-2">
+            <span>Produits actifs</span>
+            <strong id="metricProducts">0</strong>
+          </article>
+        </section>
+
+        <section class="view-panel is-active" data-panel="overview">
+          <div class="panel-grid">
+            <article class="mg-panel">
+              <div class="panel-head">
+                <div><span class="eyebrow">Commandes recentes</span><h2>Flux boutique</h2></div>
+                <button class="link-btn" data-jump="orders">Voir tout</button>
+              </div>
+              <div class="compact-list" id="recentOrders"></div>
+            </article>
+            <article class="mg-panel">
+              <div class="panel-head">
+                <div><span class="eyebrow">Evenements</span><h2>Demandes recues</h2></div>
+                <button class="link-btn" data-jump="reservations">Voir tout</button>
+              </div>
+              <div class="compact-list" id="recentReservations"></div>
+            </article>
+          </div>
+        </section>
+
+        <section class="view-panel" data-panel="orders">
+          <article class="mg-panel full">
+            <div class="panel-head">
+              <div><span class="eyebrow">Commandes</span><h2>Sur place, a emporter, livraison</h2></div>
+              <div class="controls">
+                <select id="orderTypeFilter">
+                  <option value="all">Tous les modes</option>
+                  <option value="sur_place">Sur place</option>
+                  <option value="a_emporter">A emporter</option>
+                  <option value="livraison">Livraison</option>
+                </select>
+                <select id="orderStatusFilter">
+                  <option value="all">Tous les statuts</option>
+                  <option value="nouvelle">Nouvelle</option>
+                  <option value="en_preparation">En preparation</option>
+                  <option value="prete">Prete</option>
+                  <option value="terminee">Terminee</option>
+                  <option value="annulee">Annulee</option>
+                </select>
+                <input id="orderSearch" type="search" placeholder="Client, telephone">
+              </div>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Recu</th><th>Mode</th><th>Client</th><th>Creneau</th><th>Articles</th><th>Total</th><th>Statut</th></tr></thead><tbody id="ordersTable"></tbody></table></div>
+          </article>
+        </section>
+
+        <section class="view-panel" data-panel="reservations">
+          <article class="mg-panel full">
+            <div class="panel-head">
+              <div><span class="eyebrow">Reservations</span><h2>Evenements a confirmer</h2></div>
+              <div class="controls">
+                <select id="reservationStatusFilter">
+                  <option value="all">Tous les statuts</option>
+                  <option value="nouvelle">Nouvelle</option>
+                  <option value="confirmee">Confirmee</option>
+                  <option value="terminee">Terminee</option>
+                  <option value="annulee">Annulee</option>
+                </select>
+                <input id="reservationSearch" type="search" placeholder="Nom, telephone, type">
+              </div>
+            </div>
+            <div class="table-wrap"><table><thead><tr><th>Recu</th><th>Date evenement</th><th>Client</th><th>Type</th><th>Personnes</th><th>Statut</th></tr></thead><tbody id="reservationsTable"></tbody></table></div>
+          </article>
+        </section>
+
+        <section class="view-panel" data-panel="products">
+          <div class="products-layout">
+            <article class="mg-panel category-panel">
+              <div class="panel-head">
+                <div><span class="eyebrow">Categories</span><h2>Gestion categories</h2></div>
+              </div>
+              <div class="category-manager-grid">
+                <form id="categoryForm" class="product-form">
+                  <input id="categoryId" type="hidden">
+                  <label>Collection<select id="categoryCollection"><option value="menu">Menu</option><option value="gateau">Gateaux</option></select></label>
+                  <label>Nom categorie<select id="categoryName" required></select></label>
+                  <label>Ordre categorie<input id="categoryOrder" type="number" step="1" value="100" required></label>
+                  <button class="primary-btn" type="submit">Enregistrer categorie</button>
+                </form>
+                <div class="category-list" id="categoryList"></div>
+              </div>
+            </article>
+
+            <article class="mg-panel product-form-panel">
+              <div class="panel-head">
+                <div><span class="eyebrow">Produits</span><h2 id="productFormTitle">Gestion produits</h2></div>
+                <button class="link-btn" id="resetProductForm" type="button">Reset</button>
+              </div>
+              <form id="productForm" class="product-form product-form-grid">
+                <input id="productId" type="hidden">
+                <label>Collection<select id="productCollection"><option value="gateau">Gateaux</option><option value="menu">Menu</option></select></label>
+                <label>Categorie<select id="productCategory" required></select></label>
+                <label>Nom<input id="productName" required></label>
+                <label>Description<textarea id="productDescription" rows="3"></textarea></label>
+                <input id="productImage" type="hidden">
+                <label class="image-upload-field">Image produit<input id="productImageFile" type="file" accept="image/*"></label>
+                <div class="image-upload-preview" id="productImagePreview">
+                  <img id="productImageThumb" src="images/logo.webp" alt="">
+                  <span id="productImagePath">Aucune image importee</span>
+                  <button class="small-btn" id="chooseImagesDirBtn" type="button">Autoriser dossier images</button>
+                </div>
+                <div class="form-split">
+                  <label>Prix<input id="productPrice" type="number" min="0" step="0.01" required></label>
+                  <label>Ordre produit<input id="productOrder" type="number" step="1" value="100"></label>
+                </div>
+                <div class="toggle-row">
+                  <label><input id="productPromo" type="checkbox"> Promo</label>
+                  <label><input id="productNew" type="checkbox"> Nouveau</label>
+                  <label><input id="productActive" type="checkbox" checked> Actif</label>
+                </div>
+                <button class="primary-btn" type="submit">Enregistrer</button>
+              </form>
+            </article>
+
+            <article class="mg-panel full products-table-panel">
+              <div class="panel-head">
+                <div><span class="eyebrow">Catalogue</span><h2>Tableau des produits</h2></div>
+                <div class="controls">
+                  <select id="productCollectionFilter">
+                    <option value="all">Toutes collections</option>
+                    <option value="gateau">Gateaux</option>
+                    <option value="menu">Menu</option>
+                  </select>
+                  <input id="productSearch" type="search" placeholder="Rechercher produit">
+                </div>
+              </div>
+              <div class="table-wrap"><table><thead><tr><th>Produit</th><th>Collection</th><th>Categorie</th><th>Prix</th><th>Etat</th><th>Actions</th></tr></thead><tbody id="productsTable"></tbody></table></div>
+            </article>
+          </div>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="adminToast"></div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
