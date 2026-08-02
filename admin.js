@@ -481,7 +481,8 @@
     }
     try {
       imagesDirectoryHandle = await window.showDirectoryPicker({ id: 'monde-gourmand-images', mode: 'readwrite' });
-      const target = imagesDirectoryHandle.name.toLowerCase() === 'images' ? 'images' : `${imagesDirectoryHandle.name}/images`;
+      const name = imagesDirectoryHandle.name.toLowerCase();
+      const target = name === 'uploads' ? 'images/uploads' : (name === 'images' ? 'images' : `${imagesDirectoryHandle.name}/images`);
       toast(`Dossier autorise: ${target}`);
     } catch (error) {
       if (error.name !== 'AbortError') toast(error.message || 'Dossier non autorise', 'error');
@@ -503,25 +504,42 @@
       .slice(0, 64) || 'produit';
   }
 
-  function convertImageToWebp(file) {
+  async function convertImageToWebp(file) {
+    const source = await loadImageSource(file);
+    const maxSide = 1800;
+    const scale = Math.min(1, maxSide / Math.max(source.width, source.height));
+    const width = Math.max(1, Math.round(source.width * scale));
+    const height = Math.max(1, Math.round(source.height * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext('2d', { alpha: true });
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(source.image, 0, 0, width, height);
+    source.close?.();
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', 0.88));
+    if (!blob || blob.type !== 'image/webp') throw new Error('Conversion WebP impossible');
+    return blob;
+  }
+
+  async function loadImageSource(file) {
+    if (window.createImageBitmap) {
+      try {
+        const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+        return { image: bitmap, width: bitmap.width, height: bitmap.height, close: () => bitmap.close?.() };
+      } catch (_) {
+      }
+    }
     return new Promise((resolve, reject) => {
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.onload = () => {
-        const canvas = document.createElement('canvas');
-        canvas.width = img.naturalWidth;
-        canvas.height = img.naturalHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0);
         URL.revokeObjectURL(url);
-        canvas.toBlob((blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error('Conversion WebP impossible'));
-        }, 'image/webp', 0.9);
+        resolve({ image: img, width: img.naturalWidth, height: img.naturalHeight });
       };
       img.onerror = () => {
         URL.revokeObjectURL(url);
-        reject(new Error('Image illisible'));
+        reject(new Error('Image JPG/PNG illisible'));
       };
       img.src = url;
     });
@@ -534,15 +552,21 @@
       return { path, written: false };
     }
     if (!imagesDirectoryHandle) return { path, written: false };
-    const imageRoot = imagesDirectoryHandle.name.toLowerCase() === 'images'
-      ? imagesDirectoryHandle
-      : await imagesDirectoryHandle.getDirectoryHandle('images', { create: true });
-    const uploads = await imageRoot.getDirectoryHandle('uploads', { create: true });
+    const uploads = await getUploadsDirectoryHandle();
     const fileHandle = await uploads.getFileHandle(fileName, { create: true });
     const writable = await fileHandle.createWritable();
     await writable.write(blob);
     await writable.close();
     return { path, written: true };
+  }
+
+  async function getUploadsDirectoryHandle() {
+    const name = imagesDirectoryHandle.name.toLowerCase();
+    if (name === 'uploads') return imagesDirectoryHandle;
+    const imageRoot = name === 'images'
+      ? imagesDirectoryHandle
+      : await imagesDirectoryHandle.getDirectoryHandle('images', { create: true });
+    return imageRoot.getDirectoryHandle('uploads', { create: true });
   }
 
   function downloadWebpFallback(blob, fileName) {
