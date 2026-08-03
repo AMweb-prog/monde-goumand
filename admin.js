@@ -461,14 +461,13 @@
       return toast('Cliquez d abord sur Autoriser dossier images', 'warning');
     }
     try {
-      toast('Conversion de l image en WebP...', 'info');
-      const webpBlob = file.type === 'image/webp' ? file : await convertImageToWebp(file);
+      toast('Import de l image...', 'info');
       const fileName = imageFileName(file);
-      const saved = await saveWebpImage(webpBlob, fileName);
+      const saved = await saveUploadedImage(file, fileName);
       const path = saved.path;
       $('productImage').value = path;
       renderProductImagePreview(path);
-      toast(saved.written ? 'Image importee en WebP' : 'WebP telecharge. Placez-le dans images/uploads', saved.written ? 'success' : 'warning');
+      toast(saved.written ? 'Image importee' : 'Image telechargee. Placez-la dans images/uploads', saved.written ? 'success' : 'warning');
     } catch (error) {
       event.target.value = '';
       toast(error.message || 'Image non importee', 'error');
@@ -477,7 +476,7 @@
 
   async function chooseImagesDirectory() {
     if (!window.showDirectoryPicker) {
-      return toast('Navigateur non compatible. Le WebP sera telecharge.', 'warning');
+      return toast('Navigateur non compatible. L image sera telechargee.', 'warning');
     }
     try {
       imagesDirectoryHandle = await window.showDirectoryPicker({ id: 'monde-gourmand-images', mode: 'readwrite' });
@@ -491,7 +490,14 @@
 
   function imageFileName(file) {
     const base = $('productName').value.trim() || file.name.replace(/\.[^.]+$/, '');
-    return `${slugify(base)}-${Date.now()}.webp`;
+    return `${slugify(base)}-${Date.now()}.${imageExtension(file)}`;
+  }
+
+  function imageExtension(file) {
+    const fromName = (file.name.match(/\.([a-z0-9]+)$/i)?.[1] || '').toLowerCase();
+    if (fromName) return fromName === 'jpeg' ? 'jpg' : fromName;
+    const fromType = (file.type.split('/')[1] || 'jpg').toLowerCase();
+    return fromType === 'jpeg' ? 'jpg' : fromType;
   }
 
   function slugify(value) {
@@ -504,58 +510,17 @@
       .slice(0, 64) || 'produit';
   }
 
-  async function convertImageToWebp(file) {
-    const source = await loadImageSource(file);
-    const maxSide = 1800;
-    const scale = Math.min(1, maxSide / Math.max(source.width, source.height));
-    const width = Math.max(1, Math.round(source.width * scale));
-    const height = Math.max(1, Math.round(source.height * scale));
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext('2d', { alpha: true });
-    ctx.clearRect(0, 0, width, height);
-    ctx.drawImage(source.image, 0, 0, width, height);
-    source.close?.();
-    const blob = await new Promise((resolve) => canvas.toBlob(resolve, 'image/webp', 0.88));
-    if (!blob || blob.type !== 'image/webp') throw new Error('Conversion WebP impossible');
-    return blob;
-  }
-
-  async function loadImageSource(file) {
-    if (window.createImageBitmap) {
-      try {
-        const bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
-        return { image: bitmap, width: bitmap.width, height: bitmap.height, close: () => bitmap.close?.() };
-      } catch (_) {
-      }
-    }
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      const url = URL.createObjectURL(file);
-      img.onload = () => {
-        URL.revokeObjectURL(url);
-        resolve({ image: img, width: img.naturalWidth, height: img.naturalHeight });
-      };
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error('Image JPG/PNG illisible'));
-      };
-      img.src = url;
-    });
-  }
-
-  async function saveWebpImage(blob, fileName) {
+  async function saveUploadedImage(file, fileName) {
     const path = `images/uploads/${fileName}`;
     if (!window.showDirectoryPicker) {
-      downloadWebpFallback(blob, fileName);
+      downloadImageFallback(file, fileName);
       return { path, written: false };
     }
     if (!imagesDirectoryHandle) return { path, written: false };
     const uploads = await getUploadsDirectoryHandle();
     const fileHandle = await uploads.getFileHandle(fileName, { create: true });
     const writable = await fileHandle.createWritable();
-    await writable.write(blob);
+    await writable.write(file);
     await writable.close();
     return { path, written: true };
   }
@@ -569,8 +534,8 @@
     return imageRoot.getDirectoryHandle('uploads', { create: true });
   }
 
-  function downloadWebpFallback(blob, fileName) {
-    const url = URL.createObjectURL(blob);
+  function downloadImageFallback(file, fileName) {
+    const url = URL.createObjectURL(file);
     const link = document.createElement('a');
     link.href = url;
     link.download = fileName;
