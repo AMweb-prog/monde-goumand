@@ -10,7 +10,6 @@
   const orderTypeLabel = { sur_place: 'Sur place', a_emporter: 'A emporter', livraison: 'Livraison' };
   const orderStatuses = ['nouvelle', 'en_preparation', 'prete', 'terminee', 'annulee'];
   const reservationStatuses = ['nouvelle', 'confirmee', 'terminee', 'annulee'];
-  let imagesDirectoryHandle = null;
 
   function toast(message, icon = 'success') {
     if (!message) return;
@@ -108,7 +107,6 @@
     $('productForm').addEventListener('submit', saveProduct);
     $('resetProductForm').addEventListener('click', resetProductForm);
     $('productCollection').addEventListener('change', () => renderCategorySelect());
-    $('chooseImagesDirBtn').addEventListener('click', chooseImagesDirectory);
     $('productImageFile').addEventListener('change', onProductImageChange);
     $('categoryCollection').addEventListener('change', () => {
       $('categoryId').value = '';
@@ -456,35 +454,17 @@
       event.target.value = '';
       return toast('Veuillez choisir une image valide', 'warning');
     }
-    if (window.showDirectoryPicker && !imagesDirectoryHandle) {
-      event.target.value = '';
-      return toast('Cliquez d abord sur Autoriser dossier images', 'warning');
-    }
     try {
-      toast('Import de l image...', 'info');
+      toast('Upload de l image...', 'info');
       const fileName = imageFileName(file);
-      const saved = await saveUploadedImage(file, fileName);
+      const saved = await uploadProductImage(file, fileName);
       const path = saved.path;
       $('productImage').value = path;
       renderProductImagePreview(path);
-      toast(saved.written ? 'Image importee' : 'Image telechargee. Placez-la dans images/uploads', saved.written ? 'success' : 'warning');
+      toast('Image importee');
     } catch (error) {
       event.target.value = '';
       toast(error.message || 'Image non importee', 'error');
-    }
-  }
-
-  async function chooseImagesDirectory() {
-    if (!window.showDirectoryPicker) {
-      return toast('Navigateur non compatible. L image sera telechargee.', 'warning');
-    }
-    try {
-      imagesDirectoryHandle = await window.showDirectoryPicker({ id: 'monde-gourmand-images', mode: 'readwrite' });
-      const name = imagesDirectoryHandle.name.toLowerCase();
-      const target = name === 'uploads' ? 'images/uploads' : (name === 'images' ? 'images' : `${imagesDirectoryHandle.name}/images`);
-      toast(`Dossier autorise: ${target}`);
-    } catch (error) {
-      if (error.name !== 'AbortError') toast(error.message || 'Dossier non autorise', 'error');
     }
   }
 
@@ -510,39 +490,26 @@
       .slice(0, 64) || 'produit';
   }
 
-  async function saveUploadedImage(file, fileName) {
-    const path = `images/uploads/${fileName}`;
-    if (!window.showDirectoryPicker) {
-      downloadImageFallback(file, fileName);
-      return { path, written: false };
+  async function uploadProductImage(file, fileName) {
+    if (!db?.storage) throw new Error('Supabase Storage non disponible');
+    const collection = slugify($('productCollection').value || 'produits');
+    const storagePath = `products/${collection}/${fileName}`;
+    const { error } = await db.storage
+      .from('product-images')
+      .upload(storagePath, file, {
+        cacheControl: '31536000',
+        upsert: true,
+        contentType: file.type || 'application/octet-stream'
+      });
+    if (error) {
+      const message = /bucket/i.test(error.message)
+        ? 'Creez le bucket Supabase Storage product-images puis reessayez'
+        : error.message;
+      throw new Error(message);
     }
-    if (!imagesDirectoryHandle) return { path, written: false };
-    const uploads = await getUploadsDirectoryHandle();
-    const fileHandle = await uploads.getFileHandle(fileName, { create: true });
-    const writable = await fileHandle.createWritable();
-    await writable.write(file);
-    await writable.close();
-    return { path, written: true };
-  }
-
-  async function getUploadsDirectoryHandle() {
-    const name = imagesDirectoryHandle.name.toLowerCase();
-    if (name === 'uploads') return imagesDirectoryHandle;
-    const imageRoot = name === 'images'
-      ? imagesDirectoryHandle
-      : await imagesDirectoryHandle.getDirectoryHandle('images', { create: true });
-    return imageRoot.getDirectoryHandle('uploads', { create: true });
-  }
-
-  function downloadImageFallback(file, fileName) {
-    const url = URL.createObjectURL(file);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = fileName;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    URL.revokeObjectURL(url);
+    const { data } = db.storage.from('product-images').getPublicUrl(storagePath);
+    if (!data?.publicUrl) throw new Error('URL publique image introuvable');
+    return { path: data.publicUrl };
   }
 
   function renderProductImagePreview(path) {
