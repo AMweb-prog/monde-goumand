@@ -730,10 +730,21 @@ async function sendReservationWA() {
 renderCart();
 
 /* SPA PAGE NAVIGATION */
+const MG_PAGES = ['home', 'about', 'gateau', 'menu', 'panier', 'wheel'];
+
+function normalizePageId(value) {
+  const id = String(value || '').replace(/^#/, '').trim().toLowerCase();
+  const aliases = { cart: 'panier', cakes: 'gateau', roues: 'wheel' };
+  const page = aliases[id] || id;
+  return MG_PAGES.includes(page) ? page : '';
+}
+
 function showPage(id) {
-  const pages = ['home', 'about', 'gateau', 'menu', 'panier', 'wheel'];
+  id = normalizePageId(id) || 'home';
+  const pages = MG_PAGES;
   const curtain = document.getElementById('page-curtain');
   const current = pages.find(p => { const el = document.getElementById('page-' + p); return el && el.classList.contains('active'); });
+  if (window.location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
   if (current === id) return;
   if (curtain) { curtain.classList.add('flash'); setTimeout(() => curtain.classList.remove('flash'), 200); }
   if (current) { const outEl = document.getElementById('page-' + current); if (outEl) { outEl.classList.add('leaving'); outEl.classList.remove('active'); setTimeout(() => outEl.classList.remove('leaving'), 300); } }
@@ -748,6 +759,15 @@ function showPage(id) {
     if (id === 'wheel') { setTimeout(() => { if (typeof initWheel === 'function') initWheel(); else window._pendingWheelInit = true; setTimeout(doReveal, 100); }, 50); }
   }, 150);
 }
+
+window.addEventListener('hashchange', () => {
+  showPage(normalizePageId(window.location.hash) || 'home');
+});
+
+setTimeout(() => {
+  const initialPage = normalizePageId(window.location.hash);
+  if (initialPage) showPage(initialPage);
+}, 0);
 
 /* ENHANCED GALLERY LIGHTBOX */
 (function () {
