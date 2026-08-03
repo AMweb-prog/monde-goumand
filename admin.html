@@ -143,12 +143,14 @@
             <article class="mg-panel category-panel">
               <div class="panel-head">
                 <div><span class="eyebrow">Categories</span><h2>Gestion categories</h2></div>
+                <button class="link-btn" id="resetCategoryForm" type="button">Nouvelle</button>
               </div>
               <div class="category-manager-grid">
                 <form id="categoryForm" class="product-form">
                   <input id="categoryId" type="hidden">
                   <label>Collection<select id="categoryCollection"><option value="menu">Menu</option><option value="gateau">Gateaux</option></select></label>
-                  <label>Nom categorie<select id="categoryName" required></select></label>
+                  <label>Categorie existante<select id="categoryName"></select></label>
+                  <label>Nom categorie<input id="categoryNewName" required placeholder="Nouvelle categorie"></label>
                   <label>Ordre categorie<input id="categoryOrder" type="number" step="1" value="100" required></label>
                   <button class="primary-btn" type="submit">Enregistrer categorie</button>
                 </form>

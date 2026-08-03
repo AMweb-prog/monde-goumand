@@ -106,11 +106,11 @@
     $('productsTable').addEventListener('click', onProductAction);
     $('productForm').addEventListener('submit', saveProduct);
     $('resetProductForm').addEventListener('click', resetProductForm);
+    $('resetCategoryForm').addEventListener('click', resetCategoryForm);
     $('productCollection').addEventListener('change', () => renderCategorySelect());
     $('productImageFile').addEventListener('change', onProductImageChange);
     $('categoryCollection').addEventListener('change', () => {
-      $('categoryId').value = '';
-      $('categoryOrder').value = 100;
+      resetCategoryForm(false);
       renderManagedCategorySelect();
       renderCategoryList();
     });
@@ -296,7 +296,7 @@
     const categories = categoriesFor(collection);
     const current = selectedValue ?? select.value;
     select.innerHTML = [
-      '<option value="">Choisir une categorie</option>',
+      '<option value="">Nouvelle categorie</option>',
       ...categories.map((cat) => `<option value="${esc(cat.name)}">${esc(cat.name)}</option>`)
     ].join('');
     if (current && categories.some((cat) => cat.name === current)) {
@@ -310,7 +310,19 @@
     const name = $('categoryName').value;
     const category = categoriesFor(collection).find((cat) => cat.name === name);
     $('categoryId').value = category && !category.derived ? category.id : '';
-    if (category) $('categoryOrder').value = category.sort_order || 100;
+    $('categoryNewName').value = category ? category.name : '';
+    $('categoryOrder').value = category ? (category.sort_order || 100) : 100;
+  }
+
+  function resetCategoryForm(renderSelect = true) {
+    const collection = $('categoryCollection').value || 'menu';
+    $('categoryForm').reset();
+    $('categoryCollection').value = collection;
+    $('categoryId').value = '';
+    $('categoryName').value = '';
+    $('categoryNewName').value = '';
+    $('categoryOrder').value = 100;
+    if (renderSelect) renderManagedCategorySelect('');
   }
 
   function renderCategoryList() {
@@ -329,9 +341,10 @@
   async function saveCategory(event) {
     event.preventDefault();
     const id = $('categoryId').value;
+    const previousName = $('categoryName').value.trim();
     const payload = {
       collection: $('categoryCollection').value,
-      name: $('categoryName').value.trim(),
+      name: $('categoryNewName').value.trim(),
       sort_order: Number($('categoryOrder').value || 100),
       is_active: true
     };
@@ -340,9 +353,15 @@
       ? await db.from('product_categories').update(payload).eq('id', id)
       : await db.from('product_categories').upsert(payload, { onConflict: 'collection,name' });
     if (result.error) return toast(result.error.message, 'error');
-    $('categoryForm').reset();
-    $('categoryId').value = '';
-    $('categoryOrder').value = 100;
+    if (id && previousName && previousName !== payload.name) {
+      const renameProducts = await db
+        .from('products')
+        .update({ category: payload.name })
+        .eq('collection', payload.collection)
+        .eq('category', previousName);
+      if (renameProducts.error) return toast(renameProducts.error.message, 'error');
+    }
+    resetCategoryForm(false);
     toast('Categorie enregistree');
     await loadAll();
   }
@@ -356,6 +375,7 @@
       $('categoryId').value = category.id;
       $('categoryCollection').value = category.collection;
       renderManagedCategorySelect(category.name);
+      $('categoryNewName').value = category.name;
       $('categoryOrder').value = category.sort_order || 100;
     }
     if (btn.dataset.catAction === 'delete') deleteCategory(category);
@@ -380,6 +400,7 @@
     const { error } = await db.from('product_categories').delete().eq('id', category.id);
     if (error) return toast(error.message, 'error');
     toast('Categorie supprimee');
+    resetCategoryForm(false);
     await loadAll();
   }
 
