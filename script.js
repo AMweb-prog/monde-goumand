@@ -761,7 +761,8 @@ function showPage(id) {
 }
 
 window.addEventListener('hashchange', () => {
-  showPage(normalizePageId(window.location.hash) || 'home');
+  const page = normalizePageId(window.location.hash);
+  if (page) showPage(page);
 });
 
 setTimeout(() => {

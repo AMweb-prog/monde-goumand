@@ -101,15 +101,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 <nav class="mob-nav" id="mobNav">
-  <a href="#" class="nl" data-t="home" onclick="showPage('home');  closeMob()" data-fr="Accueil" data-en="Home">Accueil</a>
-  <a href="#" class="nl" data-t="about" onclick="showPage('about'); closeMob()" data-fr="À propos" data-en="About">À propos</a>
-  <a href="#" class="nl" data-t="gateau" onclick="showPage('gateau');closeMob()" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
-  <a href="#" class="nl" data-t="menu" onclick="showPage('menu');  closeMob()" data-fr="Menu" data-en="Menu">Menu</a>
-  <a href="#" class="nl" data-t="wheel" onclick="showPage('wheel'); closeMob()" data-fr="La Roue" data-en="The Wheel">La Roue</a>
-  <a href="#" class="nl" data-t="cart" onclick="showPage('panier');closeMob()" data-fr="Panier" data-en="Cart">Panier</a>
+  <a href="#home" class="nl" data-t="home" onclick="showPage('home');  closeMob(); return false;" data-fr="Accueil" data-en="Home">Accueil</a>
+  <a href="#about" class="nl" data-t="about" onclick="showPage('about'); closeMob(); return false;" data-fr="À propos" data-en="About">À propos</a>
+  <a href="#gateau" class="nl" data-t="gateau" onclick="showPage('gateau');closeMob(); return false;" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
+  <a href="#menu" class="nl" data-t="menu" onclick="showPage('menu');  closeMob(); return false;" data-fr="Menu" data-en="Menu">Menu</a>
+  <a href="#wheel" class="nl" data-t="wheel" onclick="showPage('wheel'); closeMob(); return false;" data-fr="La Roue" data-en="The Wheel">La Roue</a>
+  <a href="#panier" class="nl" data-t="cart" onclick="showPage('panier');closeMob(); return false;" data-fr="Panier" data-en="Cart">Panier</a>
 </nav>
 <header id="siteHeader">
-  <a href="#" class="logo" onclick="showPage('home');return false;">
+  <a href="#home" class="logo" onclick="showPage('home');return false;">
     <img src="images/logo.webp" alt="Logo Monde Gourmand">
     <div class="logo-text">
       <span class="logo-name">Monde Gourmand</span>
@@ -121,12 +121,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="lang-btn on" data-lang="fr" onclick="setLanguage('fr')">FR</button>
       <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
     </div>
-    <a href="#" class="nl" id="nav-home" data-t="home" onclick="showPage('home');  return false;" data-fr="Accueil" data-en="Home">Accueil</a>
-    <a href="#" class="nl" id="nav-about" data-t="about" onclick="showPage('about'); return false;" data-fr="À propos" data-en="About">À propos</a>
-    <a href="#" class="nl" id="nav-gateau" data-t="gateau" onclick="showPage('gateau');return false;" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
-    <a href="#" class="nl" id="nav-menu" data-t="menu" onclick="showPage('menu');  return false;" data-fr="Menu" data-en="Menu">Menu</a>
-    <a href="#" class="nl" id="nav-wheel" data-t="wheel" onclick="showPage('wheel'); return false;" data-fr="La Roue" data-en="The Wheel">La Roue</a>
-    <a href="#" class="cart-btn" id="nav-panier" onclick="showPage('panier');return false;">
+    <a href="#home" class="nl" id="nav-home" data-t="home" onclick="showPage('home');  return false;" data-fr="Accueil" data-en="Home">Accueil</a>
+    <a href="#about" class="nl" id="nav-about" data-t="about" onclick="showPage('about'); return false;" data-fr="À propos" data-en="About">À propos</a>
+    <a href="#gateau" class="nl" id="nav-gateau" data-t="gateau" onclick="showPage('gateau');return false;" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
+    <a href="#menu" class="nl" id="nav-menu" data-t="menu" onclick="showPage('menu');  return false;" data-fr="Menu" data-en="Menu">Menu</a>
+    <a href="#wheel" class="nl" id="nav-wheel" data-t="wheel" onclick="showPage('wheel'); return false;" data-fr="La Roue" data-en="The Wheel">La Roue</a>
+    <a href="#panier" class="cart-btn" id="nav-panier" onclick="showPage('panier');return false;">
       <span data-t="cart" data-fr="Panier" data-en="Cart">Panier</span>
       <span class="cbadge">0</span>
     </a>
