@@ -355,11 +355,69 @@ const DEFAULT_PRODUCTS = [
 let PRODUCTS = DEFAULT_PRODUCTS.slice();
 let activeProductCat = 'all';
 
-document.querySelectorAll('.fb').forEach(b => b.addEventListener('click', function () {
-  document.querySelectorAll('.fb').forEach(x => x.classList.remove('on'));
-  this.classList.add('on');
-  renderProducts(this.dataset.cat);
-}));
+function mgCategoryKey(value) {
+  return String(value || '').trim().toLocaleLowerCase('fr');
+}
+
+function renderProductFilters(categories, products) {
+  const bar = document.getElementById('filtersBar');
+  if (!bar) return;
+
+  const configured = (categories || [])
+    .filter(category => category.collection === 'gateau' && category.is_active !== false)
+    .sort((a, b) => Number(a.sort_order || 100) - Number(b.sort_order || 100));
+  const seen = new Set();
+  const names = [];
+
+  configured.forEach(category => {
+    const name = String(category.name || '').trim();
+    const key = mgCategoryKey(name);
+    if (name && !seen.has(key)) {
+      seen.add(key);
+      names.push(name);
+    }
+  });
+
+  // Keep products visible even when their category has not yet been configured.
+  (products || []).forEach(product => {
+    const name = String(product.cat || '').trim();
+    const key = mgCategoryKey(name);
+    if (name && !seen.has(key)) {
+      seen.add(key);
+      names.push(name);
+    }
+  });
+
+  if (!names.length) return;
+  const activeKey = mgCategoryKey(activeProductCat);
+  const activeExists = activeProductCat === 'all' || names.some(name => mgCategoryKey(name) === activeKey);
+  if (!activeExists) activeProductCat = 'all';
+
+  bar.innerHTML = [
+    `<button class="fb ${activeProductCat === 'all' ? 'on' : ''}" data-cat="all">${lang === 'en' ? 'All' : 'Tous'}</button>`,
+    ...names.map(name => `<button class="fb ${mgCategoryKey(name) === mgCategoryKey(activeProductCat) ? 'on' : ''}" data-cat="${mgEsc(name)}">${mgEsc(name)}</button>`)
+  ].join('');
+}
+
+function renderProducts(cat) {
+  const grid = document.getElementById('pgrid');
+  if (!grid) return;
+  activeProductCat = cat || activeProductCat || 'all';
+  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => mgCategoryKey(p.cat) === mgCategoryKey(activeProductCat));
+  if (!list.length) { grid.innerHTML = '<div class="empty-st">Aucun produit dans cette catégorie.</div>'; return; }
+  grid.innerHTML = list.map((p, i) => `<div class="pcard" style="animation-delay:${i * 50}ms">${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}<div class="pimg" onclick="openLB(${p.id})"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"><div class="pimg-ov"><span class="pimg-zoom">🔍</span></div></div><div class="pbody"><div class="pname">${p.name}</div><div class="pdesc">${p.desc}</div><div class="pfoot"><span class="pprice">${p.price} Dh</span><button class="padd" id="pa${p.id}" onclick="doAdd(${p.id})">+ Panier</button></div></div></div>`).join('');
+}
+
+const productFiltersBar = document.getElementById('filtersBar');
+if (productFiltersBar) {
+  productFiltersBar.addEventListener('click', event => {
+    const button = event.target.closest('.fb');
+    if (!button || !productFiltersBar.contains(button)) return;
+    productFiltersBar.querySelectorAll('.fb').forEach(item => item.classList.remove('on'));
+    button.classList.add('on');
+    renderProducts(button.dataset.cat);
+  });
+}
 
 function doAdd(id) {
   const p = PRODUCTS.find(x => String(x.id) === String(id)); if (!p) return;
@@ -373,7 +431,7 @@ function renderProducts(cat) {
   const grid = document.getElementById('pgrid');
   if (!grid) return;
   activeProductCat = cat || activeProductCat || 'all';
-  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeProductCat);
+  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => mgCategoryKey(p.cat) === mgCategoryKey(activeProductCat));
   if (!list.length) {
     grid.innerHTML = '<div class="empty-st">Aucun produit dans cette categorie.</div>';
     return;
@@ -498,7 +556,8 @@ function normalizeProduct(row) {
     cat: row.category || 'gateau',
     desc: row.description || '',
     promo: Boolean(row.is_promo),
-    isNew: Boolean(row.is_new)
+    isNew: Boolean(row.is_new),
+    sortOrder: Number(row.sort_order || 100)
   };
 }
 
@@ -565,7 +624,16 @@ async function loadPublicProducts() {
   const categories = categoriesResult.data || [];
   const gateaux = data.filter(row => row.collection === 'gateau').map(normalizeProduct);
   if (gateaux.length) {
-    PRODUCTS = gateaux;
+    const categoryOrder = new Map(
+      categories
+        .filter(category => category.collection === 'gateau')
+        .map(category => [mgCategoryKey(category.name), Number(category.sort_order || 100)])
+    );
+    PRODUCTS = gateaux.sort((a, b) => {
+      const byCategory = (categoryOrder.get(mgCategoryKey(a.cat)) ?? 1000) - (categoryOrder.get(mgCategoryKey(b.cat)) ?? 1000);
+      return byCategory || a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, 'fr');
+    });
+    renderProductFilters(categories, PRODUCTS);
     renderProducts(activeProductCat);
   }
   renderDynamicMenu(data.filter(row => row.collection === 'menu'), categories);
