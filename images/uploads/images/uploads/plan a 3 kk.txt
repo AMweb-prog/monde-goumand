@@ -1,0 +1,123 @@
+       STRUCTURE PAGES PARA KENZ kenitra
+
+
+page d accueil:
+hero banner, slogan, menu, recherche
+caroussel des partenaires
+PRESENTATION DES PRODUIT
+promotions
+
+avis client 
+FAQ
+formulaire de contact
+coordonée, téléphone, email
+localisation google maps
+horaires d'ouverture
+newsletter (footer)
+
+
+
+
+
+
+page produit a proxi 10 catégoRIES
+peau :
+-seche 
+-grasse
+-sensible' 
+------------  
+serum:
+----------
+cheveux:
+shampoing anti pelliculaire ( cheveux secs- cheveux gras- cheveux sensibles)
+shampoing anti chute-energisant
+shampoing sans sulfate
+shampoing sebo reducteur'
+-----------
+bébé et maman:
+----------
+mains: 
+------
+pieds:
+--------
+
+---------
+complément alimentaire:
+immunite
+omega3
+magnisiome
+zinc
+berberine
+perfectil
+biofar 
+sommeil
+confort urinaire
+articulations
+autre complement
+-------------------
+protection solaire:
+-anti taches
+-anti age
+-peau seche
+-peau grasse
+-peau sensible
+-kids
+-mineral
+-autres
+-----------
+matériel medical:
+-bekkie
+-spardra
+-alcohol
+-bande
+-compresteril
+-sabo medical
+-------------
+diabete:
+diab control
+on call plus
+on call extra
+bionime 300
+rightest 260
+vivacheck ino
+contour plus
+accucheck 
+lancettes
+seringues BD FINE
+-------------------
+protection sexuel:
+------------------
+dentaire:
+dentifrice
+bain de bouche
+brosse a dents
+brossette interdentaire
+gratte langue
+
+produit avec video background (images, titre, description, bouton ajouter au panier)
+
+
+
+
+panier:
+recap des produits selectioné
+formulaire a remplir avec info
+nom 
+prenom 
+adress de livraison
+numero de contact
+bouton envoyé ma commande
+pop up (votre commande a été validé livraison entre 24H/48H)
+
+
+
+palette
+la meme sur site donné vert et blanc
+
+
+
+
+
+
+scroll under hero:
+caroussel des partenaires avec couleurs doit apparetre apres le scroll en dessous du hero

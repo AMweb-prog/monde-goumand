@@ -2,25 +2,6 @@
    MONDE GOURMAND — script.js (COMPLET ET CORRIGÉ)
    ============================================================ */
 
-/* ── CURSOR ──────────────────────────────────────────────── */
-const $cur = document.getElementById('cur');
-const $ring = document.getElementById('cur-ring');
-let rx = 0, ry = 0, cx = 0, cy = 0;
-if ($cur && $ring) {
-  document.addEventListener('mousemove', e => {
-    cx = e.clientX; cy = e.clientY;
-    $cur.style.left = cx + 'px'; $cur.style.top = cy + 'px';
-  });
-  function animRing() {
-    rx += (cx - rx) * 0.12; ry += (cy - ry) * 0.12;
-    $ring.style.left = rx + 'px'; $ring.style.top = ry + 'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
-  document.addEventListener('mousedown', () => $cur.style.transform = 'translate(-50%,-50%) scale(.4)');
-  document.addEventListener('mouseup', () => $cur.style.transform = 'translate(-50%,-50%) scale(1)');
-}
-
 /* ── HEADER SCROLL ───────────────────────────────────────── */
 const $hdr = document.getElementById('siteHeader');
 if ($hdr) window.addEventListener('scroll', () => $hdr.classList.toggle('scrolled', scrollY > 60), { passive: true });
@@ -251,53 +232,71 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnP = document.getElementById('gPrev');
   const btnN = document.getElementById('gNext');
   if (!track) return;
-  const outer = track.closest('.g-outer') || track.parentElement;
-  let pages = [], cur = 0, timer;
-
-  function uniqueOffsets(offsets) {
-    return offsets.filter((offset, index) => index === 0 || Math.abs(offset - offsets[index - 1]) > 2);
-  }
+  let items = [], cur = 0, timer, scrollTimer, programmaticTimer, isProgrammatic = false;
 
   function buildPages() {
-    const items = Array.from(track.querySelectorAll('.gi')).filter((item) => item.offsetWidth > 0);
-    const style = getComputedStyle(track);
-    const padLeft = parseFloat(style.paddingLeft) || 0;
-    const maxOffset = Math.max(0, track.scrollWidth - outer.clientWidth);
-    pages = uniqueOffsets(items.map((item) => Math.min(Math.max(0, item.offsetLeft - padLeft), maxOffset)));
-    if (!pages.length) pages = [0];
-    cur = Math.min(cur, pages.length - 1);
+    items = Array.from(track.querySelectorAll('.gi'));
+    if (!items.length) return;
+    cur = Math.min(cur, items.length - 1);
     renderDots();
-    go(cur, false);
+    syncCurrent();
   }
 
   function renderDots() {
     if (!dotsEl) return;
     dotsEl.innerHTML = '';
-    pages.forEach((_, i) => {
-      const d = document.createElement('div');
+    items.forEach((item, i) => {
+      const d = document.createElement('button');
+      d.type = 'button';
       d.className = 'g-dot' + (i === cur ? ' on' : '');
+      d.setAttribute('aria-label', `Afficher la création ${i + 1}`);
       d.onclick = () => go(i);
       dotsEl.appendChild(d);
     });
   }
 
-  function go(idx, animate = true) {
-    cur = (idx + pages.length) % pages.length;
-    if (!animate) track.style.transition = 'none';
-    track.style.transform = `translateX(-${pages[cur]}px)`;
-    if (!animate) requestAnimationFrame(() => { track.style.transition = ''; });
+  function syncCurrent() {
     dotsEl?.querySelectorAll('.g-dot').forEach((d, i) => d.classList.toggle('on', i === cur));
+    dotsEl?.style.setProperty('--gallery-progress', `${((cur + 1) / Math.max(items.length, 1)) * 100}%`);
+    items.forEach((item, i) => item.setAttribute('aria-current', i === cur ? 'true' : 'false'));
+  }
+
+  function go(idx, animate = true) {
+    if (!items.length) return;
+    cur = (idx + items.length) % items.length;
+    const target = Math.max(0, Math.min(
+      items[cur].offsetLeft - (track.clientWidth - items[cur].offsetWidth) / 2,
+      track.scrollWidth - track.clientWidth
+    ));
+    isProgrammatic = true;
+    clearTimeout(programmaticTimer);
+    track.scrollTo({ left: target, behavior: animate ? 'smooth' : 'auto' });
+    programmaticTimer = setTimeout(() => { isProgrammatic = false; }, animate ? 750 : 0);
+    syncCurrent();
   }
 
   function next() { go(cur + 1); }
   function prev() { go(cur - 1); }
   btnN && btnN.addEventListener('click', () => { next(); reset(); });
   btnP && btnP.addEventListener('click', () => { prev(); reset(); });
-  function start() { if (pages.length > 1) timer = setInterval(next, 3500); }
-  function reset() { clearInterval(timer); start(); }
-  track.addEventListener('mouseenter', () => clearInterval(timer));
+  function start() { if (!timer && track.offsetWidth > 0 && items.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) timer = setInterval(next, 4200); }
+  function stop() { clearInterval(timer); timer = null; }
+  function reset() { stop(); start(); }
+  track.addEventListener('mouseenter', stop);
   track.addEventListener('mouseleave', start);
+  track.addEventListener('focusin', stop);
+  track.addEventListener('focusout', start);
+  track.addEventListener('scroll', () => {
+    if (isProgrammatic) return;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      const center = track.scrollLeft + track.clientWidth / 2;
+      cur = items.reduce((best, item, i) => Math.abs(item.offsetLeft + item.offsetWidth / 2 - center) < Math.abs(items[best].offsetLeft + items[best].offsetWidth / 2 - center) ? i : best, 0);
+      syncCurrent();
+    }, 80);
+  }, { passive: true });
   window.addEventListener('resize', () => { clearTimeout(window._mgGalleryResize); window._mgGalleryResize = setTimeout(buildPages, 150); });
+  window.refreshGallery = () => { cur = 0; buildPages(); reset(); };
   buildPages();
   start();
 })();
@@ -352,15 +351,6 @@ const DEFAULT_PRODUCTS = [
 ];
 let PRODUCTS = DEFAULT_PRODUCTS.slice();
 let activeProductCat = 'all';
-
-function renderProducts(cat) {
-  const grid = document.getElementById('pgrid');
-  if (!grid) return;
-  activeProductCat = cat || activeProductCat || 'all';
-  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === activeProductCat);
-  if (!list.length) { grid.innerHTML = '<div class="empty-st">Aucun produit dans cette catégorie.</div>'; return; }
-  grid.innerHTML = list.map((p, i) => `<div class="pcard" style="animation-delay:${i * 50}ms">${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}<div class="pimg" onclick="openLB(${p.id})"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"><div class="pimg-ov"><span class="pimg-zoom">🔍</span></div></div><div class="pbody"><div class="pname">${p.name}</div><div class="pdesc">${p.desc}</div><div class="pfoot"><span class="pprice">${p.price} Dh</span><button class="padd" id="pa${p.id}" onclick="doAdd(${p.id})">+ Panier</button></div></div></div>`).join('');
-}
 
 document.querySelectorAll('.fb').forEach(b => b.addEventListener('click', function () {
   document.querySelectorAll('.fb').forEach(x => x.classList.remove('on'));
@@ -755,6 +745,7 @@ function showPage(id) {
     if (id === 'gateau') renderProducts('all');
     if (id === 'panier') renderCart();
     if (id === 'menu') { setTimeout(doReveal, 100); }
+    if (id === 'about') { setTimeout(() => { window.refreshGallery?.(); }, 80); }
     if (id === 'home') { showSpread(-1); document.querySelectorAll('.bnav-btn').forEach((btn, i) => btn.addEventListener('click', () => showSpread(i))); }
     if (id === 'wheel') { setTimeout(() => { if (typeof initWheel === 'function') initWheel(); else window._pendingWheelInit = true; setTimeout(doReveal, 100); }, 50); }
   }, 150);
