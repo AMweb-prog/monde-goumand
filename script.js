@@ -51,7 +51,10 @@ function refreshBadges() {
 }
 function addToCart(p) {
   const ex = cart.find(i => i.id == p.id);
-  if (ex) ex.qty++;
+  if (ex) {
+    ex.qty++;
+    if (p.img && !ex.img) ex.img = p.img;
+  }
   else cart.push({ ...p, qty: 1 });
   saveCart();
   showToast('✓  ' + p.name + ' ajouté au panier');
@@ -360,7 +363,7 @@ document.querySelectorAll('.fb').forEach(b => b.addEventListener('click', functi
 
 function doAdd(id) {
   const p = PRODUCTS.find(x => String(x.id) === String(id)); if (!p) return;
-  addToCart({ id: p.id, name: p.name, emoji: '🎂', price: p.price, desc: p.desc });
+  addToCart({ id: p.id, name: p.name, img: p.img, price: p.price, desc: p.desc });
   const btn = document.getElementById('pa' + id);
   if (btn) { btn.textContent = '✓ Ajouté'; btn.classList.add('ok'); setTimeout(() => { btn.textContent = '+ Panier'; btn.classList.remove('ok'); }, 1800); }
 }
@@ -647,7 +650,14 @@ function renderCart() {
   if (!cart || !cart.length) { layout.innerHTML = `<div class="cart-empty"><div class="cart-empty-ico">🛒</div><p class="cart-empty-h">Votre panier est vide</p></div>`; return; }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const qty = cart.reduce((s, i) => s + i.qty, 0);
-  const items = cart.map((it, idx) => `<div class="ci" style="animation-delay:${idx * 55}ms"><div class="ci-thumb">${it.emoji || '🎂'}</div><div class="ci-info"><div class="ci-name">${it.name}</div><div class="ci-unit">${it.price} Dh / unité</div></div><div class="ci-qty"><button class="qbtn" onclick="doQty('${it.id}',-1)">−</button><span class="qnum">${it.qty}</span><button class="qbtn" onclick="doQty('${it.id}',1)">+</button></div><div class="ci-total">${it.price * it.qty} Dh</div><button class="ci-del" title="Supprimer" onclick="doDel('${it.id}')">✕</button></div>`).join('');
+  const items = cart.map((it, idx) => {
+    const product = PRODUCTS.find(p => String(p.id) === String(it.id));
+    const image = it.img || product?.img || '';
+    const thumb = image
+      ? `<img src="${mgEsc(image)}" alt="${mgEsc(it.name)}" loading="lazy">`
+      : `<span aria-hidden="true">${it.emoji || '🎂'}</span>`;
+    return `<div class="ci" style="animation-delay:${idx * 55}ms"><div class="ci-thumb">${thumb}</div><div class="ci-info"><div class="ci-name">${mgEsc(it.name)}</div><div class="ci-unit">${mgEsc(it.price)} Dh / unité</div></div><div class="ci-qty"><button class="qbtn" onclick="doQty('${mgProductId(it.id)}',-1)" aria-label="Diminuer la quantité">−</button><span class="qnum">${it.qty}</span><button class="qbtn" onclick="doQty('${mgProductId(it.id)}',1)" aria-label="Augmenter la quantité">+</button></div><div class="ci-total">${it.price * it.qty} Dh</div><button class="ci-del" title="Supprimer" aria-label="Supprimer ${mgEsc(it.name)}" onclick="doDel('${mgProductId(it.id)}')">✕</button></div>`;
+  }).join('');
   const lines = cart.map(i => `<div class="csum-line"><span class="csl-label">${i.name} ×${i.qty}</span><span class="csl-val">${i.price * i.qty} Dh</span></div>`).join('');
   layout.innerHTML = `<div><div class="ci-head"><h2 class="ci-title">Articles sélectionnés</h2><span class="ci-count">${qty} article${qty > 1 ? 's' : ''}</span></div>${items}</div><aside class="csummary"><div class="csum-title">Résumé de commande</div>${lines}<hr class="csum-sep"><div class="csum-total"><span class="cst-label">Total</span><span class="cst-val">${total} Dh</span></div><form class="oform" onsubmit="return false"><div class="oform-header"><div class="oform-ornament">✦</div><div class="oform-title">Informations de Livraison</div><div class="oform-subtitle">Complétez vos coordonnées pour finaliser</div></div><div class="frow"><div class="ffield"><label class="flabel">Prénom</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input class="finput" id="fn" placeholder="Votre prénom" required><div class="finput-line"></div></div></div><div class="ffield"><label class="flabel">Nom</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input class="finput" id="ln" placeholder="Votre nom" required><div class="finput-line"></div></div></div></div><div class="ffield"><label class="flabel">Adresse complète</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><input class="finput" id="ad" placeholder="Rue, quartier, numéro…" required><div class="finput-line"></div></div></div><div class="ffield"><label class="flabel">Téléphone WhatsApp</label><div class="finput-wrap"><svg class="finput-ico" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 16z"/></svg><input class="finput" id="tel" type="tel" placeholder="+212 6XX XXX XXX" required><div class="finput-line"></div></div></div><button class="wa-btn" onclick="sendWA()"><span class="wa-btn-bg"></span><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg><span>Envoyer ma commande</span><svg class="wa-btn-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button><div class="oform-secure"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>Commande sécurisée · Kénitra, Maroc</div></form></aside>`;
   enhanceOrderForm();
@@ -862,8 +872,21 @@ setTimeout(() => {
 (function () {
   const video = document.querySelector('.hero-video');
   if (video) {
-    video.addEventListener('error', function () { console.log('Vidéo non trouvée, fallback sur image'); const heroBg = document.querySelector('.hero-bg'); if (heroBg) heroBg.style.display = 'block'; });
-    video.addEventListener('loadeddata', function () { const heroBg = document.querySelector('.hero-bg'); if (heroBg) heroBg.style.display = 'none'; });
+    const showVideo = () => video.classList.add('is-playing');
+    const showFallback = () => video.classList.remove('is-playing');
+    const tryPlay = () => {
+      video.muted = true;
+      video.defaultMuted = true;
+      video.setAttribute('muted', '');
+      const promise = video.play();
+      if (promise?.catch) promise.catch(showFallback);
+    };
+    video.addEventListener('playing', showVideo);
+    video.addEventListener('canplay', tryPlay, { once: true });
+    video.addEventListener('error', showFallback);
+    video.addEventListener('stalled', showFallback);
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) tryPlay(); });
+    tryPlay();
   }
 })();
 
