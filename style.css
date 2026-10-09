@@ -222,7 +222,17 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .reservation-text p{font-family:var(--ff-body);font-size:1.12rem;line-height:2;color:var(--text-mid);font-weight:300;}
 .reservation-text strong{color:var(--text);font-weight:600;}
 .reservation-form-wrap .oform{margin-top:0;}
-@media(max-width:900px){.reservation-grid{grid-template-columns:1fr;gap:36px;}}
+.reservation-visual{margin:38px 18px 20px 8px;perspective:1200px;position:relative;}
+.reservation-visual::before,.reservation-visual::after{content:'';position:absolute;border:1px solid rgba(191,155,78,.34);background:linear-gradient(145deg,rgba(255,255,255,.35),rgba(191,155,78,.12));inset:12px -12px -12px 12px;transform:rotate(2.5deg) translateZ(-20px);box-shadow:0 22px 44px rgba(67,39,18,.14);}
+.reservation-visual::after{inset:22px -20px -20px 22px;transform:rotate(4deg) translateZ(-40px);opacity:.55;}
+.reservation-photo-frame{position:relative;z-index:2;overflow:hidden;border:1px solid rgba(255,255,255,.72);background:#d1a853;box-shadow:0 28px 55px rgba(64,35,14,.24),-12px 16px 28px rgba(191,155,78,.17),inset 0 1px 0 rgba(255,255,255,.8);transform:rotateY(8deg) rotateX(2deg) rotateZ(-1.2deg);transform-origin:center;transition:transform .7s var(--ease),box-shadow .7s var(--ease);will-change:transform;}
+.reservation-photo-frame img{display:block;width:100%;aspect-ratio:3/2;object-fit:cover;filter:saturate(.92) contrast(1.03);transform:scale(1.015);transition:transform 1s var(--ease),filter .7s var(--ease);}
+.reservation-photo-shine{position:absolute;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,255,255,.38) 0%,rgba(255,255,255,0) 24%,rgba(255,255,255,0) 70%,rgba(191,155,78,.14) 100%);mix-blend-mode:screen;}
+.reservation-visual:hover .reservation-photo-frame{transform:rotateY(1deg) rotateX(0) rotateZ(0) translateY(-7px);box-shadow:0 36px 70px rgba(64,35,14,.28),0 18px 32px rgba(191,155,78,.2),inset 0 1px 0 rgba(255,255,255,.9);}
+.reservation-visual:hover .reservation-photo-frame img{transform:scale(1.055);filter:saturate(1.04) contrast(1.04);}
+@media(max-width:900px){.reservation-grid{grid-template-columns:1fr;gap:42px;}.reservation-text{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;}.reservation-visual{margin:10px 18px 20px 0;}}
+@media(max-width:680px){.reservation-text{display:block;}.reservation-visual{margin:34px 14px 18px 4px;}.reservation-photo-frame{transform:rotateY(5deg) rotateX(1deg) rotateZ(-1deg);}.reservation-visual::before{inset:9px -9px -9px 9px}.reservation-visual::after{inset:16px -14px -14px 16px}}
+@media(prefers-reduced-motion:reduce){.reservation-photo-frame,.reservation-photo-frame img{transition:none;}}
 
 /* POP-UP DE CONFIRMATION DE COMMANDE */
 .confirm-popup{position:fixed;inset:0;background:rgba(13,10,5,.6);display:flex;align-items:center;justify-content:center;z-index:9999;opacity:0;visibility:hidden;transition:opacity .35s var(--ease2),visibility 0s .35s;padding:20px;}
