@@ -233,7 +233,7 @@
     return `<tr>
       <td>${dt(r.created_at)}</td>
       <td><strong>${day(r.event_date)}</strong><span class="muted">${esc(r.event_time || '')}</span></td>
-      <td><strong>${esc(r.customer_name)}</strong><span class="muted">${esc(r.phone)}<br>${esc(r.table_note || '')}</span></td>
+      <td><strong>${esc(r.customer_name)}</strong><span class="muted">${esc(r.phone)}${r.table_note ? `<br>${/^\d+$/.test(String(r.table_note).trim()) ? 'Tables : ' : ''}${esc(r.table_note)}` : ''}</span></td>
       <td>${esc(r.event_type)}</td>
       <td>${Number(r.guests || 0)}</td>
       <td>${statusSelect('event_reservations', r.id, r.status, reservationStatuses)}</td>
