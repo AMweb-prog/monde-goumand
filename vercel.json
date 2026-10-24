@@ -1,12 +1,13 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/a-propos", "destination": "/index.html" },
-    { "source": "/gateaux", "destination": "/index.html" },
-    { "source": "/menu", "destination": "/index.html" },
-    { "source": "/panier", "destination": "/index.html" },
-    { "source": "/roue-gourmande", "destination": "/index.html" }
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "monde-goumand.vercel.app" }],
+      "destination": "https://mondegourmand.com/:path*",
+      "permanent": true
+    }
   ],
   "headers": [
     {
@@ -24,6 +25,10 @@
     {
       "source": "/admin",
       "headers": [{ "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" }]
+    },
+    {
+      "source": "/panier",
+      "headers": [{ "key": "X-Robots-Tag", "value": "noindex, follow" }]
     },
     {
       "source": "/images/(.*)",

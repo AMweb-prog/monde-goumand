@@ -15,6 +15,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <title>Monde Gourmand | Café &amp; Pâtisserie à Kénitra</title>
 <meta id="metaDescription" name="description" content="Monde Gourmand est un café-pâtisserie à Kénitra : gâteaux sur mesure, pâtisseries, petit déjeuner, boissons et réservations d'événements.">
 <meta id="metaRobots" name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
+<link id="canonicalUrl" rel="canonical" href="https://mondegourmand.com/">
 <meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <meta name="author" content="Monde Gourmand">
 <meta name="geo.region" content="MA-KEN">
@@ -48,11 +49,14 @@ window.MG_ROUTE_PATHS = { '/': 'home', '/index.html': 'home', '/a-propos': 'abou
   document.title = seo.title;
   document.getElementById('metaDescription').content = seo.description;
   if (seo.noindex) document.getElementById('metaRobots').content = 'noindex,follow';
-  var canonical = document.createElement('link');
-  canonical.id = 'canonicalUrl';
-  canonical.rel = 'canonical';
+  var canonical = document.getElementById('canonicalUrl');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.id = 'canonicalUrl';
+    canonical.rel = 'canonical';
+    document.head.appendChild(canonical);
+  }
   canonical.href = 'https://mondegourmand.com' + seo.path;
-  document.head.appendChild(canonical);
 }());
 </script>
 

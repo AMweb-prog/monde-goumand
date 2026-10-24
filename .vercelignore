@@ -8,3 +8,4 @@ monde-goumand
 *.sql
 *.log
 codex-clipboard-*
+generate-pages.js
