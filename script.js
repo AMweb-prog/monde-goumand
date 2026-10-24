@@ -13,12 +13,18 @@ if ($ham && $mobNav) {
   $ham.addEventListener('click', () => {
     const on = $mobNav.classList.toggle('on');
     $ham.classList.toggle('on', on);
+    $ham.setAttribute('aria-expanded', String(on));
+    $ham.setAttribute('aria-label', on ? 'Fermer le menu' : 'Ouvrir le menu');
     document.body.style.overflow = on ? 'hidden' : '';
   });
 }
 function closeMob() {
   if ($mobNav) $mobNav.classList.remove('on');
-  if ($ham) $ham.classList.remove('on');
+  if ($ham) {
+    $ham.classList.remove('on');
+    $ham.setAttribute('aria-expanded', 'false');
+    $ham.setAttribute('aria-label', 'Ouvrir le menu');
+  }
   document.body.style.overflow = '';
 }
 
@@ -105,12 +111,26 @@ window.addEventListener('scroll', doReveal, { passive: true });
 setTimeout(doReveal, 200);
 
 /* ── FAQ ─────────────────────────────────────────────────── */
-document.querySelectorAll('.faq-q').forEach(btn => {
+document.querySelectorAll('.faq-q').forEach((btn, index) => {
+  const panel = btn.nextElementSibling;
+  const panelId = `faq-answer-${index + 1}`;
+  btn.setAttribute('aria-expanded', 'false');
+  btn.setAttribute('aria-controls', panelId);
+  if (panel) {
+    panel.id = panelId;
+    panel.setAttribute('role', 'region');
+  }
   btn.addEventListener('click', () => {
     const item = btn.closest('.faq-item');
     const wasOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
-    if (!wasOpen) item.classList.add('open');
+    document.querySelectorAll('.faq-item.open').forEach(i => {
+      i.classList.remove('open');
+      i.querySelector('.faq-q')?.setAttribute('aria-expanded', 'false');
+    });
+    if (!wasOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
   });
 });
 
@@ -225,6 +245,17 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.bnav-btn').forEach((btn, i) => btn.addEventListener('click', () => showSpread(i)));
   document.getElementById('bPrev')?.addEventListener('click', prevSpread);
   document.getElementById('bNext')?.addEventListener('click', nextSpread);
+  document.querySelectorAll('.menu-thumb[onclick]').forEach(image => {
+    image.setAttribute('role', 'button');
+    image.tabIndex = 0;
+    image.setAttribute('aria-label', `Agrandir ${image.alt || 'le produit'}`);
+    image.addEventListener('keydown', event => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        image.click();
+      }
+    });
+  });
   document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') nextSpread(); if (e.key === 'ArrowLeft') prevSpread(); });
 });
 
@@ -394,18 +425,12 @@ function renderProductFilters(categories, products) {
   if (!activeExists) activeProductCat = 'all';
 
   bar.innerHTML = [
-    `<button class="fb ${activeProductCat === 'all' ? 'on' : ''}" data-cat="all">${lang === 'en' ? 'All' : 'Tous'}</button>`,
-    ...names.map(name => `<button class="fb ${mgCategoryKey(name) === mgCategoryKey(activeProductCat) ? 'on' : ''}" data-cat="${mgEsc(name)}">${mgEsc(name)}</button>`)
+    `<button class="fb ${activeProductCat === 'all' ? 'on' : ''}" data-cat="all" aria-pressed="${activeProductCat === 'all'}">${lang === 'en' ? 'All' : 'Tous'}</button>`,
+    ...names.map(name => {
+      const isActive = mgCategoryKey(name) === mgCategoryKey(activeProductCat);
+      return `<button class="fb ${isActive ? 'on' : ''}" data-cat="${mgEsc(name)}" aria-pressed="${isActive}">${mgEsc(name)}</button>`;
+    })
   ].join('');
-}
-
-function renderProducts(cat) {
-  const grid = document.getElementById('pgrid');
-  if (!grid) return;
-  activeProductCat = cat || activeProductCat || 'all';
-  const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => mgCategoryKey(p.cat) === mgCategoryKey(activeProductCat));
-  if (!list.length) { grid.innerHTML = '<div class="empty-st">Aucun produit dans cette catégorie.</div>'; return; }
-  grid.innerHTML = list.map((p, i) => `<div class="pcard" style="animation-delay:${i * 50}ms">${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}<div class="pimg" onclick="openLB(${p.id})"><img src="${p.img}" alt="${p.name}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;"><div class="pimg-ov"><span class="pimg-zoom">🔍</span></div></div><div class="pbody"><div class="pname">${p.name}</div><div class="pdesc">${p.desc}</div><div class="pfoot"><span class="pprice">${p.price} Dh</span><button class="padd" id="pa${p.id}" onclick="doAdd(${p.id})">+ Panier</button></div></div></div>`).join('');
 }
 
 const productFiltersBar = document.getElementById('filtersBar');
@@ -413,8 +438,12 @@ if (productFiltersBar) {
   productFiltersBar.addEventListener('click', event => {
     const button = event.target.closest('.fb');
     if (!button || !productFiltersBar.contains(button)) return;
-    productFiltersBar.querySelectorAll('.fb').forEach(item => item.classList.remove('on'));
+    productFiltersBar.querySelectorAll('.fb').forEach(item => {
+      item.classList.remove('on');
+      item.setAttribute('aria-pressed', 'false');
+    });
     button.classList.add('on');
+    button.setAttribute('aria-pressed', 'true');
     renderProducts(button.dataset.cat);
   });
 }
@@ -438,11 +467,11 @@ function renderProducts(cat) {
   }
   grid.innerHTML = list.map((p, i) => {
     const id = mgProductId(p.id);
-    return `<div class="pcard" style="animation-delay:${i * 50}ms">
+    return `<article class="pcard" id="product-${encodeURIComponent(id)}" style="animation-delay:${i * 50}ms">
       ${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}
       ${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}
-      <div class="pimg" onclick="openLB('${id}')">
-        <img src="${mgEsc(p.img)}" alt="${mgEsc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+      <div class="pimg" role="button" tabindex="0" aria-label="Agrandir ${mgEsc(p.name)}" onclick="openLB('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLB('${id}');}">
+        <img src="${mgEsc(p.img)}" alt="${mgEsc(p.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
         <div class="pimg-ov"><span class="pimg-zoom">+</span></div>
       </div>
       <div class="pbody">
@@ -450,17 +479,23 @@ function renderProducts(cat) {
         <div class="pdesc">${mgEsc(p.desc)}</div>
         <div class="pfoot">
           <span class="pprice">${mgEsc(p.price)} Dh</span>
-          <button class="padd" id="pa${id}" onclick="doAdd('${id}')">+ Panier</button>
+          <button class="padd" id="pa${id}" onclick="doAdd('${id}')" aria-label="Ajouter ${mgEsc(p.name)} au panier">+ Panier</button>
         </div>
       </div>
-    </div>`;
+    </article>`;
   }).join('');
 }
 
+let activeDialogTrigger = null;
+
 function closeLB() {
   const lb = document.getElementById('lb');
-  if (lb) lb.classList.remove('on');
+  if (lb) {
+    lb.classList.remove('on');
+    lb.setAttribute('aria-hidden', 'true');
+  }
   document.body.style.overflow = '';
+  activeDialogTrigger?.focus?.();
 }
 
 /* ── Lightbox image Menu ── */
@@ -474,26 +509,28 @@ function openMenuImg(imgEl, caption) {
     : src;
   big.alt = caption;
   cap.textContent = caption;
+  activeDialogTrigger = imgEl;
   lb.classList.add('on');
+  lb.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  lb.querySelector('.menu-img-lb-close')?.focus();
 }
 
 function closeMenuImg() {
   const lb = document.getElementById('menu-img-lb');
-  if (lb) lb.classList.remove('on');
+  if (lb) {
+    lb.classList.remove('on');
+    lb.setAttribute('aria-hidden', 'true');
+  }
   document.body.style.overflow = '';
+  activeDialogTrigger?.focus?.();
 }
 
 function openLB(id) {
-  console.log('openLB appelé avec id:', id);
-  
   const p = PRODUCTS.find(x => String(x.id) === String(id));
   if (!p) {
-    console.error('Produit non trouvé:', id);
     return;
   }
-  
-  console.log('Produit trouvé:', p.name, p.img);
   
   const lb = document.getElementById('lb');
   const lbIco = document.getElementById('lbIco');
@@ -507,10 +544,7 @@ function openLB(id) {
     return;
   }
   
-  // VIDER complètement le conteneur
   lbIco.innerHTML = '';
-  
-  // Créer un élément image propre
   const img = document.createElement('img');
   img.src = p.img;
   img.alt = p.name;
@@ -523,7 +557,6 @@ function openLB(id) {
   img.style.margin = '0 auto';
   img.style.animation = 'zoomIn 0.4s cubic-bezier(0.23, 1, 0.32, 1)';
   
-  // Ajouter l'image au conteneur
   lbIco.appendChild(img);
   
   lbName.textContent = p.name;
@@ -534,8 +567,11 @@ function openLB(id) {
     closeLB(); 
   };
   
+  activeDialogTrigger = document.activeElement;
   lb.classList.add('on');
+  lb.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  lb.querySelector('.lb-close')?.focus();
 }
 
 // Fermeture avec clic extérieur ou Echap
@@ -544,7 +580,7 @@ document.addEventListener('click', function(e) {
   if (lb && lb.classList.contains('on') && e.target === lb) closeLB();
 });
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeLB(); closeMenuImg(); }
+  if (e.key === 'Escape') { closeLB(); closeMenuImg(); closeConfirmPopup(); }
 });
 
 function normalizeProduct(row) {
@@ -559,6 +595,53 @@ function normalizeProduct(row) {
     isNew: Boolean(row.is_new),
     sortOrder: Number(row.sort_order || 100)
   };
+}
+
+function renderProductStructuredData(products) {
+  let script = document.getElementById('productStructuredData');
+  if (!script) {
+    script = document.createElement('script');
+    script.id = 'productStructuredData';
+    script.type = 'application/ld+json';
+    document.head.appendChild(script);
+  }
+  const baseUrl = 'https://mondegourmand.com/';
+  const itemListElement = (products || []).map((product, index) => {
+    const productId = encodeURIComponent(String(product.id));
+    const image = /^https?:\/\//i.test(product.img || '')
+      ? product.img
+      : new URL(String(product.img || 'images/logo.webp').replace(/^\//, ''), baseUrl).href;
+    const item = {
+      '@type': 'Product',
+      '@id': `https://mondegourmand.com/gateaux#product-${productId}`,
+      name: product.name,
+      description: product.desc || `${product.name} par Monde Gourmand à Kénitra`,
+      image,
+      category: product.cat,
+      brand: { '@id': 'https://mondegourmand.com/#organization' },
+      url: `https://mondegourmand.com/gateaux#product-${productId}`
+    };
+    if (Number(product.price) > 0) {
+      item.offers = {
+        '@type': 'Offer',
+        price: Number(product.price).toFixed(2),
+        priceCurrency: 'MAD',
+        availability: 'https://schema.org/InStock',
+        url: item.url,
+        seller: { '@id': 'https://mondegourmand.com/#organization' }
+      };
+    }
+    return { '@type': 'ListItem', position: index + 1, item };
+  });
+  script.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': 'https://mondegourmand.com/gateaux#catalogue',
+    name: 'Catalogue de gâteaux et pâtisseries Monde Gourmand',
+    url: 'https://mondegourmand.com/gateaux',
+    numberOfItems: itemListElement.length,
+    itemListElement
+  });
 }
 
 function renderDynamicMenu(rows, categories) {
@@ -593,7 +676,7 @@ function renderDynamicMenu(rows, categories) {
     </div>
     <div class="menu-items-grid">
       ${groups[category].map(item => `<div class="menu-item ${item.is_promo ? 'menu-item--promo' : ''} ${item.is_new ? 'menu-item--new' : ''}">
-        <img class="menu-thumb" src="${mgEsc(item.image_url || 'images/logo.webp')}" alt="${mgEsc(item.name)}" onclick="openMenuImg(this,'${mgProductId(item.name)}')">
+        <img class="menu-thumb" src="${mgEsc(item.image_url || 'images/logo.webp')}" alt="${mgEsc(item.name)}" loading="lazy" decoding="async" width="64" height="64" role="button" tabindex="0" aria-label="Agrandir ${mgEsc(item.name)}" onclick="openMenuImg(this,'${mgProductId(item.name)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();this.click();}">
         <div class="menu-item-info"><span class="menu-item-name">${mgEsc(item.name)}</span><span class="menu-item-desc">${mgEsc(item.description || '')}</span></div>
         <span class="menu-item-price">${mgEsc(item.price)} Dh</span>
       </div>`).join('')}
@@ -635,11 +718,13 @@ async function loadPublicProducts() {
     });
     renderProductFilters(categories, PRODUCTS);
     renderProducts(activeProductCat);
+    renderProductStructuredData(PRODUCTS);
   }
   renderDynamicMenu(data.filter(row => row.collection === 'menu'), categories);
 }
 
 renderProducts('all');
+renderProductStructuredData(PRODUCTS);
 loadPublicProducts();
 
 function enhanceOrderForm() {
@@ -764,11 +849,20 @@ async function sendWA() {
 /* ── POP-UP DE CONFIRMATION (délai 48h) ─────────────────── */
 function showConfirmPopup() {
   const p = document.getElementById('confirmPopup');
-  if (p) p.classList.add('on');
+  if (p) {
+    activeDialogTrigger = document.activeElement;
+    p.classList.add('on');
+    p.setAttribute('aria-hidden', 'false');
+    p.querySelector('.confirm-popup-btn')?.focus();
+  }
 }
 function closeConfirmPopup() {
   const p = document.getElementById('confirmPopup');
-  if (p) p.classList.remove('on');
+  if (p) {
+    p.classList.remove('on');
+    p.setAttribute('aria-hidden', 'true');
+  }
+  activeDialogTrigger?.focus?.();
 }
 
 /* ── RÉSERVATION D'ÉVÉNEMENT (page À propos) ────────────── */
@@ -799,44 +893,130 @@ renderCart();
 
 /* SPA PAGE NAVIGATION */
 const MG_PAGES = ['home', 'about', 'gateau', 'menu', 'panier', 'wheel'];
+const MG_ROUTES = window.MG_SEO_ROUTES || {
+  home: { path: '/' }, about: { path: '/a-propos' }, gateau: { path: '/gateaux' },
+  menu: { path: '/menu' }, panier: { path: '/panier' }, wheel: { path: '/roue-gourmande' }
+};
 
 function normalizePageId(value) {
-  const id = String(value || '').replace(/^#/, '').trim().toLowerCase();
-  const aliases = { cart: 'panier', cakes: 'gateau', roues: 'wheel' };
+  const raw = String(value || '').trim().toLowerCase();
+  const cleanPath = raw.startsWith('/') ? (raw.replace(/\/$/, '') || '/') : '';
+  const routePage = cleanPath && window.MG_ROUTE_PATHS?.[cleanPath];
+  if (routePage) return routePage;
+  const id = raw.replace(/^#/, '');
+  const aliases = { cart: 'panier', cakes: 'gateau', gateaux: 'gateau', roues: 'wheel', 'roue-gourmande': 'wheel', 'a-propos': 'about' };
   const page = aliases[id] || id;
   return MG_PAGES.includes(page) ? page : '';
 }
 
-function showPage(id) {
+function pageFromLocation() {
+  const path = window.location.pathname.replace(/\/$/, '') || '/';
+  const pathPage = normalizePageId(path);
+  const legacyHashPage = normalizePageId(window.location.hash);
+  return pathPage || legacyHashPage || 'home';
+}
+
+function setMetaContent(selector, content) {
+  const element = document.querySelector(selector);
+  if (element) element.setAttribute('content', content);
+}
+
+function updatePageSEO(id) {
+  const seo = MG_ROUTES[id] || MG_ROUTES.home;
+  const canonicalUrl = `https://mondegourmand.com${seo.path || '/'}`;
+  if (seo.title) document.title = seo.title;
+  if (seo.description) {
+    setMetaContent('#metaDescription', seo.description);
+    setMetaContent('#ogDescription', seo.description);
+    setMetaContent('#twitterDescription', seo.description);
+  }
+  if (seo.title) {
+    setMetaContent('#ogTitle', seo.title);
+    setMetaContent('#twitterTitle', seo.title);
+  }
+  setMetaContent('#ogUrl', canonicalUrl);
+  setMetaContent('#metaRobots', seo.noindex ? 'noindex,follow' : 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1');
+  const canonical = document.getElementById('canonicalUrl');
+  if (canonical) canonical.href = canonicalUrl;
+
+  let breadcrumbScript = document.getElementById('breadcrumbStructuredData');
+  if (!breadcrumbScript) {
+    breadcrumbScript = document.createElement('script');
+    breadcrumbScript.id = 'breadcrumbStructuredData';
+    breadcrumbScript.type = 'application/ld+json';
+    document.head.appendChild(breadcrumbScript);
+  }
+  const labels = { about: 'À propos', gateau: 'Gâteaux et pâtisseries', menu: 'Menu', panier: 'Panier', wheel: 'Roue Gourmande' };
+  const itemListElement = [{ '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://mondegourmand.com/' }];
+  if (id !== 'home') itemListElement.push({ '@type': 'ListItem', position: 2, name: labels[id], item: canonicalUrl });
+  breadcrumbScript.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement });
+
+  const skipLink = document.getElementById('skipLink');
+  if (skipLink) skipLink.href = `#page-${id}`;
+}
+
+function showPage(id, options = {}) {
   id = normalizePageId(id) || 'home';
   const pages = MG_PAGES;
   const curtain = document.getElementById('page-curtain');
   const current = pages.find(p => { const el = document.getElementById('page-' + p); return el && el.classList.contains('active'); });
-  if (window.location.hash !== `#${id}`) history.pushState(null, '', `#${id}`);
-  if (current === id) return;
+  const route = MG_ROUTES[id] || MG_ROUTES.home;
+  const targetUrl = `${route.path || '/'}${options.anchor ? `#${options.anchor}` : ''}`;
+  if (options.updateHistory !== false && `${window.location.pathname}${window.location.hash}` !== targetUrl) {
+    history.pushState({ page: id }, '', targetUrl);
+  }
+  updatePageSEO(id);
+  pages.forEach(page => {
+    const link = document.getElementById('nav-' + page);
+    if (!link) return;
+    link.classList.toggle('on', page === id);
+    if (page === id) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  document.querySelectorAll('#mobNav a').forEach(link => {
+    const isActive = link.getAttribute('href') === route.path;
+    if (isActive) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  if (current === id) {
+    pages.forEach(page => {
+      const section = document.getElementById('page-' + page);
+      if (section) section.setAttribute('aria-hidden', String(page !== id));
+    });
+    if (options.anchor) document.getElementById(options.anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
   if (curtain) { curtain.classList.add('flash'); setTimeout(() => curtain.classList.remove('flash'), 200); }
   if (current) { const outEl = document.getElementById('page-' + current); if (outEl) { outEl.classList.add('leaving'); outEl.classList.remove('active'); setTimeout(() => outEl.classList.remove('leaving'), 300); } }
   setTimeout(() => {
-    pages.forEach(p => { const el = document.getElementById('page-' + p); if (!el) return; if (p === id) { el.classList.add('active'); el.classList.remove('leaving'); } else { el.classList.remove('active'); } });
-    pages.forEach(p => { const link = document.getElementById('nav-' + p); if (link) link.classList.toggle('on', p === id); });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    pages.forEach(p => {
+      const el = document.getElementById('page-' + p);
+      if (!el) return;
+      const isActive = p === id;
+      el.classList.toggle('active', isActive);
+      el.setAttribute('aria-hidden', String(!isActive));
+      if (isActive) el.classList.remove('leaving');
+    });
+    window.scrollTo({ top: 0, behavior: options.instant ? 'auto' : 'smooth' });
     if (id === 'gateau') renderProducts('all');
     if (id === 'panier') renderCart();
     if (id === 'menu') { setTimeout(doReveal, 100); }
     if (id === 'about') { setTimeout(() => { window.refreshGallery?.(); }, 80); }
     if (id === 'home') { showSpread(-1); document.querySelectorAll('.bnav-btn').forEach((btn, i) => btn.addEventListener('click', () => showSpread(i))); }
     if (id === 'wheel') { setTimeout(() => { if (typeof initWheel === 'function') initWheel(); else window._pendingWheelInit = true; setTimeout(doReveal, 100); }, 50); }
+    const anchor = options.anchor || (!normalizePageId(window.location.hash) ? window.location.hash.slice(1) : '');
+    if (anchor) setTimeout(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
   }, 150);
 }
 
 window.addEventListener('hashchange', () => {
   const page = normalizePageId(window.location.hash);
-  if (page) showPage(page);
+  if (page) showPage(page, { updateHistory: false });
 });
+window.addEventListener('popstate', () => showPage(pageFromLocation(), { updateHistory: false, instant: true }));
 
 setTimeout(() => {
-  const initialPage = normalizePageId(window.location.hash);
-  if (initialPage) showPage(initialPage);
+  showPage(pageFromLocation(), { updateHistory: false, instant: true });
 }, 0);
 
 /* ENHANCED GALLERY LIGHTBOX */
@@ -847,16 +1027,20 @@ setTimeout(() => {
   function buildGLB() {
     if (document.getElementById('glb')) return;
     const div = document.createElement('div'); div.id = 'glb';
-    div.innerHTML = `<button class="glb-close" onclick="closeGLB()">✕</button><div class="glb-counter" id="glbCounter"></div><button class="glb-arrow prev" id="glbPrev" onclick="glbNav(-1)">←</button><div class="glb-stage"><img class="glb-real-img" id="glbImg" src=""><div class="glb-label" id="glbLabel"></div><div class="glb-gradient"></div><div class="glb-meta" id="glbMeta">Notre Galerie Gourmande</div></div><button class="glb-arrow next" id="glbNext" onclick="glbNav(1)">→</button><div class="glb-dots" id="glbDots"></div><div class="glb-swipe-hint">← Swipe ou touches fléchées →</div>`;
+    div.setAttribute('role', 'dialog');
+    div.setAttribute('aria-modal', 'true');
+    div.setAttribute('aria-labelledby', 'glbMeta');
+    div.setAttribute('aria-hidden', 'true');
+    div.innerHTML = `<button class="glb-close" onclick="closeGLB()" aria-label="Fermer la galerie">✕</button><div class="glb-counter" id="glbCounter"></div><button class="glb-arrow prev" id="glbPrev" onclick="glbNav(-1)" aria-label="Image précédente">←</button><div class="glb-stage"><img class="glb-real-img" id="glbImg" src=""><div class="glb-label" id="glbLabel"></div><div class="glb-gradient"></div><div class="glb-meta" id="glbMeta">Notre Galerie Gourmande</div></div><button class="glb-arrow next" id="glbNext" onclick="glbNav(1)" aria-label="Image suivante">→</button><div class="glb-dots" id="glbDots"></div><div class="glb-swipe-hint">← Swipe ou touches fléchées →</div>`;
     document.body.appendChild(div);
     document.getElementById('glbPrev')?.addEventListener('click', () => glbNav(-1));
     document.getElementById('glbNext')?.addEventListener('click', () => glbNav(1));
     div.addEventListener('click', e => { if (e.target === div) closeGLB(); });
   }
   function updateDots() { const dots = document.getElementById('glbDots'); if (!dots) return; dots.innerHTML = ''; for (let i = 0; i < GALLERY_DATA.length; i++) { const d = document.createElement('div'); d.className = 'glb-dot' + (i === glbIdx ? ' on' : ''); d.onclick = () => { glbIdx = i; renderGLB(); }; dots.appendChild(d); } }
-  function renderGLB() { const it = GALLERY_DATA[glbIdx]; document.getElementById('glbImg').src = it.img; document.getElementById('glbLabel').textContent = it.label; document.getElementById('glbCounter').textContent = `${glbIdx + 1} / ${GALLERY_DATA.length}`; document.querySelectorAll('.glb-dot').forEach((d, i) => d.classList.toggle('on', i === glbIdx)); }
-  window.openGLB = function (idx) { buildGLB(); glbIdx = idx; renderGLB(); updateDots(); document.getElementById('glb').classList.add('on'); document.body.style.overflow = 'hidden'; };
-  window.closeGLB = function () { const el = document.getElementById('glb'); if (el) el.classList.remove('on'); document.body.style.overflow = ''; };
+  function renderGLB() { const it = GALLERY_DATA[glbIdx]; const image = document.getElementById('glbImg'); image.src = it.img; image.alt = it.label || 'Création Monde Gourmand'; document.getElementById('glbLabel').textContent = it.label; document.getElementById('glbCounter').textContent = `${glbIdx + 1} / ${GALLERY_DATA.length}`; document.querySelectorAll('.glb-dot').forEach((d, i) => d.classList.toggle('on', i === glbIdx)); }
+  window.openGLB = function (idx) { buildGLB(); activeDialogTrigger = document.activeElement; glbIdx = idx; renderGLB(); updateDots(); const gallery = document.getElementById('glb'); gallery.classList.add('on'); gallery.setAttribute('aria-hidden', 'false'); gallery.querySelector('.glb-close')?.focus(); document.body.style.overflow = 'hidden'; };
+  window.closeGLB = function () { const el = document.getElementById('glb'); if (el) { el.classList.remove('on'); el.setAttribute('aria-hidden', 'true'); } document.body.style.overflow = ''; activeDialogTrigger?.focus?.(); };
   window.glbNav = function (dir) { glbIdx = (glbIdx + dir + GALLERY_DATA.length) % GALLERY_DATA.length; renderGLB(); updateDots(); };
   document.addEventListener('keydown', e => { if (document.getElementById('glb')?.classList.contains('on')) { if (e.key === 'ArrowRight') glbNav(1); if (e.key === 'ArrowLeft') glbNav(-1); if (e.key === 'Escape') closeGLB(); } });
   document.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });

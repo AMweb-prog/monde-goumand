@@ -36,8 +36,8 @@ drop policy if exists "Authenticated admins can manage product categories" on pu
 create policy "Authenticated admins can manage product categories"
 on public.product_categories for all
 to authenticated
-using (true)
-with check (true);
+using (public.is_admin())
+with check (public.is_admin());
 
 create index if not exists product_categories_collection_sort_idx
 on public.product_categories(collection, sort_order, name);

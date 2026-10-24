@@ -1,0 +1,38 @@
+# Monde Gourmand
+
+> Monde Gourmand est un café-pâtisserie situé au 126 Avenue Mohamed El Qori à Kénitra, au Maroc. L'établissement propose des gâteaux sur mesure, pâtisseries, petits déjeuners, cafés, boissons, produits salés et réservations d'événements privés.
+
+## Pages officielles
+
+- [Accueil](https://mondegourmand.com/) : présentation de l'établissement, services, coordonnées et questions fréquentes.
+- [À propos et événements](https://mondegourmand.com/a-propos) : histoire, savoir-faire et formulaire de réservation.
+- [Gâteaux et pâtisseries](https://mondegourmand.com/gateaux) : catalogue public alimenté par Supabase, catégories et commande.
+- [Menu](https://mondegourmand.com/menu) : carte des petits déjeuners, boissons, pâtisseries, crêpes, gaufres, pancakes et produits salés.
+- [Roue Gourmande](https://mondegourmand.com/roue-gourmande) : fonctionnement du programme ludique de fidélité.
+
+## Informations vérifiables
+
+- Nom : Monde Gourmand
+- Activité : café, pâtisserie, gâteaux sur mesure et événements privés
+- Adresse : 126 Avenue Mohamed El Qori, Kénitra, Maroc
+- Téléphone : +212 530 322 681
+- E-mail : mondegourmand.contact@gmail.com
+- Horaires affichés : tous les jours de 8 h à 23 h 30
+- Devise : dirham marocain (MAD)
+- Instagram : https://www.instagram.com/monde.gourmand/
+- Livraison Glovo : https://glovoapp.com/fr/ma/kenitra/stores/monde-gourmand-knt
+
+## Services
+
+1. Gâteaux personnalisés pour anniversaires, mariages, baptêmes et célébrations. Un délai d'au moins 48 heures est conseillé.
+2. Commandes sur place, à emporter ou en livraison depuis le panier du site.
+3. Réservations d'anniversaires, fiançailles et réunions via le formulaire d'événement.
+4. Buffets sucrés, candy bars et assortiments de pâtisseries sur devis.
+
+## Allergènes
+
+Les produits peuvent contenir du gluten, du lactose, des œufs, des fruits à coque et des arachides. Les personnes allergiques doivent contacter directement l'établissement avant de commander.
+
+## Source et fraîcheur
+
+Le catalogue et les catégories sont administrés par Monde Gourmand dans Supabase. Les prix, disponibilités et créations peuvent évoluer ; les informations affichées sur le site public font foi au moment de la consultation.

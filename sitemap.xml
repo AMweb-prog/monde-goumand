@@ -1,8 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://www.mondegourmand.ma/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
+    <loc>https://mondegourmand.com/</loc>
+    <lastmod>2026-10-24</lastmod>
+    <image:image>
+      <image:loc>https://mondegourmand.com/images/reservation-evenements.jpg</image:loc>
+      <image:title>Monde Gourmand, café et pâtisserie à Kénitra</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mondegourmand.com/a-propos</loc>
+    <lastmod>2026-10-24</lastmod>
+    <image:image>
+      <image:loc>https://mondegourmand.com/images/gallerie/nouveautes/anniversaire-roses-mignardises.jpeg</image:loc>
+      <image:title>Événements et créations pâtissières Monde Gourmand</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mondegourmand.com/gateaux</loc>
+    <lastmod>2026-10-24</lastmod>
+    <image:image>
+      <image:loc>https://mondegourmand.com/images/gateau/birthday.webp</image:loc>
+      <image:title>Gâteaux sur mesure à Kénitra</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mondegourmand.com/menu</loc>
+    <lastmod>2026-10-24</lastmod>
+    <image:image>
+      <image:loc>https://mondegourmand.com/images/petitdej/express.webp</image:loc>
+      <image:title>Menu du café-pâtisserie Monde Gourmand</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://mondegourmand.com/roue-gourmande</loc>
+    <lastmod>2026-10-24</lastmod>
   </url>
 </urlset>

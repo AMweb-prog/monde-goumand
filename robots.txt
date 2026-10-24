@@ -1,4 +1,25 @@
 User-agent: *
 Allow: /
+Disallow: /panier
+Disallow: /insert-
+Disallow: /supabase-
 
-Sitemap: https://www.mondegourmand.ma/sitemap.xml
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /panier
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /panier
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /panier
+
+Sitemap: https://mondegourmand.com/sitemap.xml
