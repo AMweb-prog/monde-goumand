@@ -68,7 +68,6 @@
     const { data } = await db.auth.getSession();
     if (data.session?.user) {
       state.user = data.session.user;
-      if (!(await verifyAdminAccess())) return;
       showApp();
       await loadAll();
       subscribeRealtime();
@@ -83,7 +82,6 @@
       const { data, error } = await db.auth.signInWithPassword({ email, password });
       if (error) return toast(error.message, 'error');
       state.user = data.user;
-      if (!(await verifyAdminAccess())) return;
       showApp();
       await loadAll();
       subscribeRealtime();
@@ -121,19 +119,6 @@
     $('categoryForm').addEventListener('submit', saveCategory);
     $('categoryList').addEventListener('click', onCategoryAction);
     $('categoryList').addEventListener('change', onCategoryOrderChange);
-  }
-
-  async function verifyAdminAccess() {
-    const { data, error } = await db.rpc('is_admin');
-    if (!error && data === true) return true;
-
-    await db.auth.signOut();
-    state.user = null;
-    $('adminShell').classList.add('is-auth');
-    $('authScreen').classList.remove('is-hidden');
-    $('appScreen').classList.add('is-hidden');
-    toast(error ? 'Protection administrateur non configurée dans Supabase.' : 'Accès administrateur refusé.', 'error');
-    return false;
   }
 
   function showApp() {
