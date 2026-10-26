@@ -9,6 +9,7 @@ monde-goumand
 *.log
 codex-clipboard-*
 generate-pages.js
+site-template.html
 # Pages légales : non publiées tant que les informations légales ne sont pas complétées
 mentions-legales.html
 confidentialite.html

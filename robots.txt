@@ -22,4 +22,4 @@ User-agent: PerplexityBot
 Allow: /
 Disallow: /panier
 
-Sitemap: https://mondegourmand.com/sitemap.xml
+Sitemap: https://www.mondegourmand.com/sitemap.xml

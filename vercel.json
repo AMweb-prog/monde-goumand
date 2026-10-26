@@ -4,8 +4,14 @@
   "redirects": [
     {
       "source": "/:path*",
+      "has": [{ "type": "host", "value": "mondegourmand.com" }],
+      "destination": "https://www.mondegourmand.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
       "has": [{ "type": "host", "value": "monde-goumand.vercel.app" }],
-      "destination": "https://mondegourmand.com/:path*",
+      "destination": "https://www.mondegourmand.com/:path*",
       "permanent": true
     }
   ],

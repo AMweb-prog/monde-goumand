@@ -632,13 +632,17 @@ function normalizeProduct(row) {
 
 function renderProductStructuredData(products) {
   let script = document.getElementById('productStructuredData');
+  if (!document.getElementById('page-gateau')?.classList.contains('active')) {
+    script?.remove();
+    return;
+  }
   if (!script) {
     script = document.createElement('script');
     script.id = 'productStructuredData';
     script.type = 'application/ld+json';
     document.head.appendChild(script);
   }
-  const baseUrl = 'https://mondegourmand.com/';
+  const baseUrl = 'https://www.mondegourmand.com/';
   const itemListElement = (products || []).map((product, index) => {
     const productId = encodeURIComponent(String(product.id));
     const image = /^https?:\/\//i.test(product.img || '')
@@ -646,22 +650,21 @@ function renderProductStructuredData(products) {
       : new URL(String(product.img || 'images/logo.webp').replace(/^\//, ''), baseUrl).href;
     const item = {
       '@type': 'Product',
-      '@id': `https://mondegourmand.com/gateaux#product-${productId}`,
+      '@id': `https://www.mondegourmand.com/gateaux#product-${productId}`,
       name: product.name,
       description: product.desc || `${product.name} par Monde Gourmand à Kénitra`,
       image,
       category: product.cat,
-      brand: { '@id': 'https://mondegourmand.com/#organization' },
-      url: `https://mondegourmand.com/gateaux#product-${productId}`
+      brand: { '@id': 'https://www.mondegourmand.com/#organization' },
+      url: `https://www.mondegourmand.com/gateaux#product-${productId}`
     };
     if (Number(product.price) > 0) {
       item.offers = {
         '@type': 'Offer',
         price: Number(product.price).toFixed(2),
         priceCurrency: 'MAD',
-        availability: 'https://schema.org/InStock',
         url: item.url,
-        seller: { '@id': 'https://mondegourmand.com/#organization' }
+        seller: { '@id': 'https://www.mondegourmand.com/#organization' }
       };
     }
     return { '@type': 'ListItem', position: index + 1, item };
@@ -669,9 +672,9 @@ function renderProductStructuredData(products) {
   script.textContent = JSON.stringify({
     '@context': 'https://schema.org',
     '@type': 'ItemList',
-    '@id': 'https://mondegourmand.com/gateaux#catalogue',
+    '@id': 'https://www.mondegourmand.com/gateaux#catalogue',
     name: 'Catalogue de gâteaux et pâtisseries Monde Gourmand',
-    url: 'https://mondegourmand.com/gateaux',
+    url: 'https://www.mondegourmand.com/gateaux',
     numberOfItems: itemListElement.length,
     itemListElement
   });
@@ -956,7 +959,7 @@ function setMetaContent(selector, content) {
 
 function updatePageSEO(id) {
   const seo = MG_ROUTES[id] || MG_ROUTES.home;
-  const canonicalUrl = `https://mondegourmand.com${seo.path || '/'}`;
+  const canonicalUrl = `https://www.mondegourmand.com${seo.path || '/'}`;
   if (seo.title) document.title = seo.title;
   if (seo.description) {
     setMetaContent('#metaDescription', seo.description);
@@ -973,16 +976,25 @@ function updatePageSEO(id) {
   if (canonical) canonical.href = canonicalUrl;
 
   let breadcrumbScript = document.getElementById('breadcrumbStructuredData');
-  if (!breadcrumbScript) {
-    breadcrumbScript = document.createElement('script');
-    breadcrumbScript.id = 'breadcrumbStructuredData';
-    breadcrumbScript.type = 'application/ld+json';
-    document.head.appendChild(breadcrumbScript);
+  if (id === 'home') {
+    breadcrumbScript?.remove();
+  } else {
+    if (!breadcrumbScript) {
+      breadcrumbScript = document.createElement('script');
+      breadcrumbScript.id = 'breadcrumbStructuredData';
+      breadcrumbScript.type = 'application/ld+json';
+      document.head.appendChild(breadcrumbScript);
+    }
+    const labels = { about: 'À propos', gateau: 'Gâteaux et pâtisseries', menu: 'Menu', panier: 'Panier', wheel: 'Roue Gourmande' };
+    breadcrumbScript.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://www.mondegourmand.com/' },
+        { '@type': 'ListItem', position: 2, name: labels[id], item: canonicalUrl }
+      ]
+    });
   }
-  const labels = { about: 'À propos', gateau: 'Gâteaux et pâtisseries', menu: 'Menu', panier: 'Panier', wheel: 'Roue Gourmande' };
-  const itemListElement = [{ '@type': 'ListItem', position: 1, name: 'Accueil', item: 'https://mondegourmand.com/' }];
-  if (id !== 'home') itemListElement.push({ '@type': 'ListItem', position: 2, name: labels[id], item: canonicalUrl });
-  breadcrumbScript.textContent = JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement });
 
   const skipLink = document.getElementById('skipLink');
   if (skipLink) skipLink.href = `#page-${id}`;
@@ -995,6 +1007,10 @@ function showPage(id, options = {}) {
   const current = pages.find(p => { const el = document.getElementById('page-' + p); return el && el.classList.contains('active'); });
   const route = MG_ROUTES[id] || MG_ROUTES.home;
   const targetUrl = `${route.path || '/'}${options.anchor ? `#${options.anchor}` : ''}`;
+  if (!document.getElementById('page-' + id)) {
+    window.location.assign(targetUrl);
+    return;
+  }
   if (options.updateHistory !== false && `${window.location.pathname}${window.location.hash}` !== targetUrl) {
     history.pushState({ page: id }, '', targetUrl);
   }
@@ -1030,6 +1046,7 @@ function showPage(id, options = {}) {
       el.setAttribute('aria-hidden', String(!isActive));
       if (isActive) el.classList.remove('leaving');
     });
+    renderProductStructuredData(PRODUCTS);
     window.scrollTo({ top: 0, behavior: options.instant ? 'auto' : 'smooth' });
     if (id === 'gateau') renderProducts('all');
     if (id === 'panier') renderCart();

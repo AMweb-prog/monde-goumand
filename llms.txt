@@ -4,11 +4,11 @@
 
 ## Pages officielles
 
-- [Accueil](https://mondegourmand.com/) : présentation de l'établissement, services, coordonnées et questions fréquentes.
-- [À propos et événements](https://mondegourmand.com/a-propos) : histoire, savoir-faire et formulaire de réservation.
-- [Gâteaux et pâtisseries](https://mondegourmand.com/gateaux) : catalogue public alimenté par Supabase, catégories et commande.
-- [Menu](https://mondegourmand.com/menu) : carte des petits déjeuners, boissons, pâtisseries, crêpes, gaufres, pancakes et produits salés.
-- [Roue Gourmande](https://mondegourmand.com/roue-gourmande) : fonctionnement du programme ludique de fidélité.
+- [Accueil](https://www.mondegourmand.com/) : présentation de l'établissement, services, coordonnées et questions fréquentes.
+- [À propos et événements](https://www.mondegourmand.com/a-propos) : histoire, savoir-faire et formulaire de réservation.
+- [Gâteaux et pâtisseries](https://www.mondegourmand.com/gateaux) : catalogue public alimenté par Supabase, catégories et commande.
+- [Menu](https://www.mondegourmand.com/menu) : carte des petits déjeuners, boissons, pâtisseries, crêpes, gaufres, pancakes et produits salés.
+- [Roue Gourmande](https://www.mondegourmand.com/roue-gourmande) : fonctionnement du programme ludique de fidélité.
 
 ## Informations vérifiables
 
