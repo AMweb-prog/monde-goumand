@@ -75,6 +75,9 @@ for (const [id, seo] of Object.entries(ROUTES)) {
     + productLightbox
     + tail;
 
+  // Chaque route a son propre document : les liens internes doivent naviguer nativement.
+  html = html.replace(/\s+onclick="showPage\([^"]*"/g, '');
+
   html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${esc(seo.title)}</title>`, '<title>');
   html = setMeta(html, 'id="metaDescription"', seo.description);
   html = setMeta(html, 'id="metaRobots"', robots);

@@ -238,15 +238,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <a class="skip-link" id="skipLink" href="#page-home">Aller au contenu principal</a>
 <nav class="mob-nav" id="mobNav" aria-label="Navigation mobile">
-  <a href="/" class="nl" data-t="home" onclick="showPage('home'); closeMob(); return false;" data-fr="Accueil" data-en="Home">Accueil</a>
-  <a href="/a-propos" class="nl" data-t="about" onclick="showPage('about'); closeMob(); return false;" data-fr="À propos" data-en="About">À propos</a>
-  <a href="/gateaux" class="nl" data-t="gateau" onclick="showPage('gateau');closeMob(); return false;" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
-  <a href="/menu" class="nl" data-t="menu" onclick="showPage('menu'); closeMob(); return false;" data-fr="Menu" data-en="Menu">Menu</a>
-  <a href="/roue-gourmande" class="nl" data-t="wheel" onclick="showPage('wheel'); closeMob(); return false;" data-fr="La Roue" data-en="The Wheel">La Roue</a>
-  <a href="/panier" class="nl" data-t="cart" onclick="showPage('panier');closeMob(); return false;" data-fr="Panier" data-en="Cart">Panier</a>
+  <a href="/" class="nl" data-t="home" data-fr="Accueil" data-en="Home">Accueil</a>
+  <a href="/a-propos" class="nl" data-t="about" data-fr="À propos" data-en="About">À propos</a>
+  <a href="/gateaux" class="nl" data-t="gateau" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
+  <a href="/menu" class="nl" data-t="menu" data-fr="Menu" data-en="Menu">Menu</a>
+  <a href="/roue-gourmande" class="nl" data-t="wheel" data-fr="La Roue" data-en="The Wheel">La Roue</a>
+  <a href="/panier" class="nl" data-t="cart" data-fr="Panier" data-en="Cart">Panier</a>
 </nav>
 <header id="siteHeader">
-  <a href="/" class="logo" onclick="showPage('home');return false;" aria-label="Monde Gourmand - Accueil">
+  <a href="/" class="logo" aria-label="Monde Gourmand - Accueil">
     <img src="images/logo.webp" alt="Logo Monde Gourmand" width="247" height="290">
     <div class="logo-text">
       <span class="logo-name">Monde Gourmand</span>
@@ -258,12 +258,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button class="lang-btn on" data-lang="fr" onclick="setLanguage('fr')">FR</button>
       <button class="lang-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
     </div>
-    <a href="/" class="nl" id="nav-home" data-t="home" onclick="showPage('home'); return false;" data-fr="Accueil" data-en="Home">Accueil</a>
-    <a href="/a-propos" class="nl" id="nav-about" data-t="about" onclick="showPage('about'); return false;" data-fr="À propos" data-en="About">À propos</a>
-    <a href="/gateaux" class="nl" id="nav-gateau" data-t="gateau" onclick="showPage('gateau');return false;" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
-    <a href="/menu" class="nl" id="nav-menu" data-t="menu" onclick="showPage('menu'); return false;" data-fr="Menu" data-en="Menu">Menu</a>
-    <a href="/roue-gourmande" class="nl" id="nav-wheel" data-t="wheel" onclick="showPage('wheel'); return false;" data-fr="La Roue" data-en="The Wheel">La Roue</a>
-    <a href="/panier" class="cart-btn" id="nav-panier" onclick="showPage('panier');return false;">
+    <a href="/" class="nl" id="nav-home" data-t="home" data-fr="Accueil" data-en="Home">Accueil</a>
+    <a href="/a-propos" class="nl" id="nav-about" data-t="about" data-fr="À propos" data-en="About">À propos</a>
+    <a href="/gateaux" class="nl" id="nav-gateau" data-t="gateau" data-fr="Gâteaux" data-en="Cakes">Gâteaux</a>
+    <a href="/menu" class="nl" id="nav-menu" data-t="menu" data-fr="Menu" data-en="Menu">Menu</a>
+    <a href="/roue-gourmande" class="nl" id="nav-wheel" data-t="wheel" data-fr="La Roue" data-en="The Wheel">La Roue</a>
+    <a href="/panier" class="cart-btn" id="nav-panier">
       <span data-t="cart" data-fr="Panier" data-en="Cart">Panier</span>
       <span class="cbadge">0</span>
     </a>
@@ -279,7 +279,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="pg-hero-bg"></div>
   <div class="pg-ghost" data-fr="PANIER" data-en="CART">PANIER</div>
   <div class="pg-hero-c">
-    <nav class="breadcrumbs" aria-label="Fil d'Ariane"><a href="/" onclick="showPage('home');return false;">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Panier</span></nav>
+    <nav class="breadcrumbs" aria-label="Fil d'Ariane"><a href="/">Accueil</a><span aria-hidden="true">/</span><span aria-current="page">Panier</span></nav>
     <span class="tag" data-fr="Votre Sélection" data-en="Your Selection">Votre Sélection</span>
     <h1 class="h2"><span data-fr="Mon" data-en="My">Mon</span> <em>Panier</em></h1>
   </div>
@@ -308,12 +308,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
     <div>
       <p class="ft-col-h" data-fr="Navigation" data-en="Navigation">Navigation</p>
-      <a href="/" onclick="showPage('home');return false;" class="ft-link" data-fr="Accueil" data-en="Home">Accueil</a>
-      <a href="/a-propos" onclick="showPage('about');return false;" class="ft-link" data-fr="À propos de nous" data-en="About us">À propos de nous</a>
-      <a href="/gateaux" onclick="showPage('gateau');return false;" class="ft-link" data-fr="Gâteaux &amp; Pâtisseries" data-en="Cakes &amp; Pastries">Gâteaux &amp; Pâtisseries</a>
-      <a href="/menu" onclick="showPage('menu');return false;" class="ft-link" data-fr="Menu" data-en="Menu">Menu</a>
-      <a href="/roue-gourmande" onclick="showPage('wheel');return false;" class="ft-link" data-fr="La Roue Gourmande" data-en="The Gourmet Wheel">La Roue Gourmande</a>
-      <a href="/panier" onclick="showPage('panier');return false;" class="ft-link" data-fr="Mon panier" data-en="My cart">Mon panier</a>
+      <a href="/" class="ft-link" data-fr="Accueil" data-en="Home">Accueil</a>
+      <a href="/a-propos" class="ft-link" data-fr="À propos de nous" data-en="About us">À propos de nous</a>
+      <a href="/gateaux" class="ft-link" data-fr="Gâteaux &amp; Pâtisseries" data-en="Cakes &amp; Pastries">Gâteaux &amp; Pâtisseries</a>
+      <a href="/menu" class="ft-link" data-fr="Menu" data-en="Menu">Menu</a>
+      <a href="/roue-gourmande" class="ft-link" data-fr="La Roue Gourmande" data-en="The Gourmet Wheel">La Roue Gourmande</a>
+      <a href="/panier" class="ft-link" data-fr="Mon panier" data-en="My cart">Mon panier</a>
     </div>
   </div>
   <div class="ft-bot">
@@ -371,10 +371,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <h3 style="font-family: serif; font-size: 1.6rem; margin-top: 10px;">Monde <em style="font-style: italic; color: #5C3010;">Gourmand</em></h3>
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
-      <a href="/gateaux" onclick="showPage('gateau'); closeFlyingPaper(); return false;" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🍰 Gâteaux & Pâtisseries" data-en="🍰 Cakes & Pastries">🍰 Gâteaux & Pâtisseries</a>
-      <a href="/roue-gourmande" onclick="showPage('wheel'); closeFlyingPaper(); return false;" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🎡 La Roue Gourmande" data-en="🎡 The Gourmet Wheel">🎡 La Roue Gourmande</a>
-      <a href="/a-propos" onclick="showPage('about'); closeFlyingPaper(); return false;" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="📖 Notre Histoire" data-en="📖 Our Story">📖 Notre Histoire</a>
-      <a href="/panier" onclick="showPage('panier'); closeFlyingPaper(); return false;" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🛒 Mon Panier" data-en="🛒 My Cart">🛒 Mon Panier</a>
+      <a href="/gateaux" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🍰 Gâteaux & Pâtisseries" data-en="🍰 Cakes & Pastries">🍰 Gâteaux & Pâtisseries</a>
+      <a href="/roue-gourmande" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🎡 La Roue Gourmande" data-en="🎡 The Gourmet Wheel">🎡 La Roue Gourmande</a>
+      <a href="/a-propos" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="📖 Notre Histoire" data-en="📖 Our Story">📖 Notre Histoire</a>
+      <a href="/panier" style="display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: rgba(191,155,78,0.08); border: 1px solid rgba(191,155,78,0.15); border-radius: 12px; text-decoration: none; color: #1C1005;" data-fr="🛒 Mon Panier" data-en="🛒 My Cart">🛒 Mon Panier</a>
     </div>
     <div style="text-align: center; padding-top: 20px; border-top: 1px solid rgba(191,155,78,0.2);">
       <p style="font-family: Arial; font-size: 0.6rem; color: #8A6840;" data-fr="✨Bienvenue chez Monde Gourmand✨" data-en="✨Welcome to Monde Gourmand✨">✨Bienvenue chez Monde Gourmand✨</p>
@@ -427,6 +427,6 @@ function closeFlyingPaper() {}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="script.js?v=20261024-2"></script>
+<script src="script.js?v=20261026-1"></script>
 </body>
 </html>
