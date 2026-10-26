@@ -230,7 +230,7 @@ window.MG_ROUTE_PATHS = { '/': 'home', '/index.html': 'home', '/a-propos': 'abou
 }
 </script>
 
-<link rel="stylesheet" href="style.css?v=20261024-2">
+<link rel="stylesheet" href="style.css?v=20261026-1">
 <style>
 .page-section{display:none}
 .page-section.active{display:block}
@@ -317,13 +317,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2 data-fr="Gâteaux personnalisés et pâtisseries à Kénitra" data-en="Custom cakes and pastries in Kenitra">Gâteaux personnalisés et pâtisseries à Kénitra</h2>
     <p data-fr="Notre pâtisserie à Kénitra propose des gâteaux d'anniversaire, créations cake design, gâteaux de mariage, number cakes, pâtisseries individuelles et trompe-l'œil. Les photos, descriptions et prix du catalogue vous aident à choisir avant de commander." data-en="Our pastry shop in Kenitra offers birthday cakes, cake design creations, wedding cakes, number cakes, individual pastries and trompe-l'œil desserts. Catalogue photos, descriptions and prices help you choose before ordering.">Notre <strong>pâtisserie à Kénitra</strong> propose des gâteaux d'anniversaire, créations cake design, gâteaux de mariage, number cakes, pâtisseries individuelles et trompe-l'œil. Les photos, descriptions et prix du catalogue vous aident à choisir avant de commander.</p>
   </div>
-  <div class="filters rv" id="filtersBar">
-    <button class="fb on" data-cat="all" data-fr="Tous" data-en="All" aria-pressed="true">Tous</button>
-    <button class="fb" data-cat="gateau" data-fr="Gâteaux" data-en="Cakes" aria-pressed="false">Gâteaux</button>
-    <button class="fb" data-cat="patisserie" data-fr="Pâtisseries" data-en="Pastries" aria-pressed="false">Pâtisseries</button>
-    <button class="fb" data-cat="boisson" data-fr="Boissons" data-en="Beverages" aria-pressed="false">Boissons</button>
-  </div>
-  <div class="pgrid" id="pgrid" aria-live="polite"></div>
+  <div class="filters rv" id="filtersBar" style="display:none"></div>
+  <div class="pgrid" id="pgrid" aria-live="polite"><p class="catalogue-status" role="status">Chargement des produits...</p></div>
   <div class="catalogue-guide">
     <h2 data-fr="Comment commander un gâteau personnalisé à Kénitra ?" data-en="How do I order a custom cake in Kenitra?">Comment commander un gâteau personnalisé à Kénitra ?</h2>
     <p data-fr="Parcourez les créations, choisissez votre gâteau ou votre pâtisserie puis ajoutez-le au panier. Pour une décoration ou un format particulier, contactez Monde Gourmand avant de confirmer votre commande. Une anticipation d'au moins 48 heures est conseillée pour les gâteaux sur mesure." data-en="Browse the creations, choose a cake or pastry and add it to your cart. For a specific decoration or size, contact Monde Gourmand before confirming your order. At least 48 hours' notice is recommended for custom cakes.">Parcourez les créations, choisissez votre gâteau ou votre pâtisserie puis ajoutez-le au panier. Pour une décoration ou un format particulier, contactez Monde Gourmand avant de confirmer votre commande. Une anticipation d'au moins 48 heures est conseillée pour les gâteaux sur mesure.</p>
@@ -470,6 +465,6 @@ function closeFlyingPaper() {}
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<script src="script.js?v=20261026-1"></script>
+<script src="script.js?v=20261026-2"></script>
 </body>
 </html>

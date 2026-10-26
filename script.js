@@ -134,131 +134,6 @@ document.querySelectorAll('.faq-q').forEach((btn, index) => {
   });
 });
 
-/* ── BOOK DATA ───────────────────────────────────────────── */
-const SPREADS = [
-  { left: { tag: 'Boissons Chaudes', title: "L'Art du Café", items: [{ img: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=80&h=80&fit=crop', name: 'Espresso', desc: 'Arabica · Torréfaction maison', price: '15 Dh' }, { img: 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=80&h=80&fit=crop', name: 'Cappuccino', desc: 'Espresso · Mousse veloutée · Cacao', price: '30 Dh' }, { img: 'https://images.unsplash.com/photo-1561882468-9110d70d7f48?w=80&h=80&fit=crop', name: 'Café Latte', desc: 'Double espresso · Lait vapeur', price: '35 Dh' }, { img: 'https://images.unsplash.com/photo-1542990253-a781e5583e61?w=80&h=80&fit=crop', name: 'Chocolat Chaud Belge', desc: 'Chocolat 60% · Crème fouettée', price: '28 Dh' }, { img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=80&h=80&fit=crop', name: 'Matcha Latte', desc: 'Matcha premium · Lait de coco', price: '38 Dh' }] }, right: { tag: 'Pâtisseries Vedettes', title: 'Nos Signatures', items: [{ img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=80&h=80&fit=crop', name: 'Croissant au Beurre', desc: 'Pâte feuilletée · Beurre AOP', price: '18 Dh' }, { img: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=80&h=80&fit=crop', name: 'Pain au Chocolat', desc: 'Chocolat noir 70% · Beurre AOP', price: '22 Dh' }, { img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=80&h=80&fit=crop', name: 'Tarte aux Fraises', desc: 'Crème pâtissière · Fraises fraîches', price: '45 Dh' }, { img: 'https://images.unsplash.com/photo-1519915028121-7d3463d20b13?w=80&h=80&fit=crop', name: 'Tarte Citron Meringuée', desc: 'Meringue italienne · Lemon curd', price: '50 Dh' }, { img: 'https://images.unsplash.com/photo-1571115177098-24ec42ed204d?w=80&h=80&fit=crop', name: 'Financier Amande', desc: 'Beurre noisette · Amandes · Miel', price: '20 Dh' }] } },
-  { left: { tag: 'Gâteaux & Entremets', title: 'Créations Maison', items: [{ img: 'https://images.unsplash.com/photo-1567171466295-4afa63d45416?w=80&h=80&fit=crop', name: 'Forêt Noire', desc: 'Cerise · Chantilly · Génoise', price: '75 Dh' }, { img: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=80&h=80&fit=crop', name: 'Tiramisu Classique', desc: 'Mascarpone · Espresso · Cacao', price: '55 Dh' }, { img: 'https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=80&h=80&fit=crop', name: 'Mille-Feuille', desc: 'Feuilletage caramélisé · Crème diplomate', price: '65 Dh' }, { img: 'https://images.unsplash.com/photo-1571066811602-716837d681de?w=80&h=80&fit=crop', name: 'Opéra Cake', desc: 'Joconde · Café · Ganache', price: '70 Dh' }, { img: 'https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=80&h=80&fit=crop', name: 'Red Velvet', desc: 'Cream cheese frosting · Cacao', price: '80 Dh' }] }, right: { tag: 'Macarons & Petits Fours', title: 'Plaisirs Sucrés', items: [{ img: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=80&h=80&fit=crop', name: 'Macaron Framboise', desc: 'Ganache framboise · Biscuit amande', price: '15 Dh' }, { img: 'https://images.unsplash.com/photo-1558326567-98ae2405596b?w=80&h=80&fit=crop', name: 'Macaron Pistache', desc: 'Crème pistache · Éclats', price: '15 Dh' }, { img: 'https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=80&h=80&fit=crop', name: 'Macaron Caramel Salé', desc: 'Caramel breton · Fleur de sel', price: '15 Dh' }, { img: 'https://images.unsplash.com/photo-1550617931-e17a7b70dce2?w=80&h=80&fit=crop', name: 'Éclair au Chocolat', desc: 'Choux · Ganache · Fondant brillant', price: '30 Dh' }, { img: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=80&h=80&fit=crop', name: 'Paris-Brest', desc: 'Crème pralinée · Noisettes', price: '60 Dh' }] } },
-  { left: { tag: 'Boissons Froides', title: 'Fraîcheur & Saveurs', items: [{ img: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=80&h=80&fit=crop', name: 'Iced Latte Caramel', desc: 'Espresso · Lait · Caramel salé', price: '40 Dh' }, { img: 'https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=80&h=80&fit=crop', name: 'Smoothie Mangue', desc: 'Mangue · Lait de coco · Menthe', price: '35 Dh' }, { img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=80&h=80&fit=crop', name: 'Limonade Artisanale', desc: 'Citron · Basilic · Gingembre', price: '25 Dh' }, { img: 'https://images.unsplash.com/photo-1572490122747-3b69b6b462ae?w=80&h=80&fit=crop', name: 'Milkshake Chocolat', desc: 'Glace artisanale · Chocolat belge', price: '38 Dh' }, { img: 'https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=80&h=80&fit=crop', name: 'Smoothie Myrtille', desc: 'Myrtille · Banane · Lait d\'amande', price: '35 Dh' }] }, right: { tag: 'Formules & Offres', title: 'Nos Suggestions', items: [{ img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=80&h=80&fit=crop', name: 'Formule Matin', desc: 'Café + viennoiserie au choix', price: '45 Dh' }, { img: 'https://images.unsplash.com/photo-1607920592519-bab2a80efd52?w=80&h=80&fit=crop', name: 'Formule Pause', desc: 'Thé + macaron × 2', price: '40 Dh' }, { img: 'https://images.unsplash.com/photo-1558326567-98ae2405596b?w=80&h=80&fit=crop', name: 'Plateau Dégustation', desc: 'Assortiment 6 macarons', price: '80 Dh' }, { img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=80&h=80&fit=crop', name: 'Gâteau Entier', desc: 'Sur commande · Personnalisé', price: 'Sur devis' }, { img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=80&h=80&fit=crop', name: 'Formule Événement', desc: 'Buffet sucré · Traiteur', price: 'Nous appeler' }] } },
-  { left: { tag: 'Thés & Infusions', title: 'Douceurs Chaudes', items: [{ img: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=80&h=80&fit=crop', name: 'Thé à la Menthe', desc: 'Menthe fraîche · Sucre · Tradition', price: '18 Dh' }, { img: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=80&h=80&fit=crop', name: 'Thé Earl Grey', desc: 'Bergamote · Lait · Miel', price: '22 Dh' }, { img: 'https://images.unsplash.com/photo-1544145945-f90425340c7e?w=80&h=80&fit=crop', name: 'Infusion Hibiscus', desc: 'Hibiscus · Rose · Gingembre', price: '20 Dh' }, { img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=80&h=80&fit=crop', name: 'Chaï Latte', desc: 'Épices · Lait vapeur · Cannelle', price: '32 Dh' }, { img: 'https://images.unsplash.com/photo-1617951653493-b30f60f55f12?w=80&h=80&fit=crop', name: 'Thé Vert Jasmin', desc: 'Jasmin · Fleur d\'oranger · Douceur', price: '20 Dh' }] }, right: { tag: 'Cheesecakes & Mousses', title: 'Légèreté & Gourmandise', items: [{ img: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?w=80&h=80&fit=crop', name: 'Cheesecake Framboise', desc: 'Fromage frais · Coulis · Biscuit', price: '55 Dh' }, { img: 'https://images.unsplash.com/photo-1560180474-e8563fd75bab?w=80&h=80&fit=crop', name: 'Cheesecake Citron', desc: 'Cream cheese · Zestes · Meringue', price: '55 Dh' }, { img: 'https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?w=80&h=80&fit=crop', name: 'Mousse Chocolat Noir', desc: 'Chocolat 72% · Texture aérienne', price: '40 Dh' }, { img: 'https://images.unsplash.com/photo-1488477181946-6428a0291777?w=80&h=80&fit=crop', name: 'Panna Cotta Vanille', desc: 'Vanille Bourbon · Coulis fruits rouges', price: '38 Dh' }, { img: 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=80&h=80&fit=crop', name: 'Bavarois Mangue', desc: 'Mousse mangue · Miroir fruit', price: '50 Dh' }] } },
-  { left: { tag: 'Viennoiseries du Jour', title: 'Sortis du Four', items: [{ img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=80&h=80&fit=crop', name: 'Croissant Amande', desc: 'Crème amandine · Amandes effilées', price: '25 Dh' }, { img: 'https://images.unsplash.com/photo-1549931319-a545dcf3bc73?w=80&h=80&fit=crop', name: 'Brioche Sucrée', desc: 'Beurre AOP · Mie filante · Vanille', price: '22 Dh' }, { img: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=80&h=80&fit=crop', name: 'Chausson aux Pommes', desc: 'Compote maison · Feuilletage doré', price: '20 Dh' }, { img: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=80&h=80&fit=crop', name: 'Kouign-Amann', desc: 'Beurre salé · Caramel croustillant', price: '28 Dh' }, { img: 'https://images.unsplash.com/photo-1571066811602-716837d681de?w=80&h=80&fit=crop', name: 'Palmier au Sucre', desc: 'Feuilletage caramélisé · Croustillant', price: '15 Dh' }] }, right: { tag: 'Salé & Snacking', title: 'Pause Gourmande', items: [{ img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=80&h=80&fit=crop', name: 'Quiche Lorraine', desc: 'Lardons · Gruyère · Pâte brisée', price: '40 Dh' }, { img: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?w=80&h=80&fit=crop', name: 'Sandwich Club', desc: 'Poulet · Avocat · Tomate · Mayo', price: '45 Dh' }, { img: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?w=80&h=80&fit=crop', name: 'Croque Monsieur', desc: 'Jambon · Béchamel · Fromage fondu', price: '38 Dh' }, { img: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?w=80&h=80&fit=crop', name: 'Wrap Thon Avocat', desc: 'Thon · Avocat · Salade · Citron', price: '42 Dh' }, { img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=80&h=80&fit=crop', name: 'Salade Caesar', desc: 'Romaine · Parmesan · Croûtons', price: '48 Dh' }] } },
-  { left: { tag: 'Glaces & Sorbets', title: 'Fraîcheur Glacée', items: [{ img: 'https://images.unsplash.com/photo-1497034825429-c343d7c6a68f?w=80&h=80&fit=crop', name: 'Boule Vanille Bourbon', desc: 'Vanille Madagascar · Crème fraîche', price: '18 Dh' }, { img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?w=80&h=80&fit=crop', name: 'Sorbet Citron', desc: 'Citron frais · Menthe · Zestes', price: '18 Dh' }, { img: 'https://images.unsplash.com/photo-1576506295286-5cda18df43e7?w=80&h=80&fit=crop', name: 'Coupe 3 Boules', desc: 'Au choix · Chantilly · Sauce chocolat', price: '45 Dh' }, { img: 'https://images.unsplash.com/photo-1488900128323-21503983a07e?w=80&h=80&fit=crop', name: 'Sundae Caramel', desc: 'Glace vanille · Caramel · Noisettes', price: '48 Dh' }, { img: 'https://images.unsplash.com/photo-1514190051997-0f6f39ca5cde?w=80&h=80&fit=crop', name: 'Affogato', desc: 'Glace vanille · Double espresso chaud', price: '38 Dh' }] }, right: { tag: 'Spécialités Marocaines', title: 'Saveurs du Maroc', items: [{ img: 'https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?w=80&h=80&fit=crop', name: 'Cornes de Gazelle', desc: 'Pâte d\'amande · Eau de fleur d\'oranger', price: '12 Dh' }, { img: 'https://images.unsplash.com/photo-1627308595229-7830a5c18aba?w=80&h=80&fit=crop', name: 'Chebakia', desc: 'Miel · Sésame · Épices traditionnelles', price: '10 Dh' }, { img: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?w=80&h=80&fit=crop', name: 'M\'hancha', desc: 'Serpentin amande · Cannelle · Orange', price: '55 Dh' }, { img: 'https://images.unsplash.com/photo-1617951653493-b30f60f55f12?w=80&h=80&fit=crop', name: 'Thé à la Menthe Royal', desc: 'Gunpowder · Menthe fraîche · Cérémonie', price: '25 Dh' }, { img: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?w=80&h=80&fit=crop', name: 'Bastilla Sucrée', desc: 'Amandes · Cannelle · Feuille de brick', price: '65 Dh' }] } },
-  { left: { tag: 'Cake Design', title: 'Créations Artistiques', items: [{ img: 'https://images.unsplash.com/photo-1562777717-dc6984f65a63?w=80&h=80&fit=crop', name: 'Wedding Cake', desc: '3 étages · Fleurs sugar · Personnalisé', price: 'Sur devis' }, { img: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=80&h=80&fit=crop', name: 'Gâteau Anniversaire', desc: 'Décoration sur mesure · Figurines', price: '150 Dh+' }, { img: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=80&h=80&fit=crop', name: 'Number Cake', desc: 'Chiffres en biscuit · Crème · Fleurs', price: '200 Dh' }, { img: 'https://images.unsplash.com/photo-1607920592519-bab2a80efd52?w=80&h=80&fit=crop', name: 'Naked Cake', desc: 'Layers apparents · Fruits frais · Rustic', price: '180 Dh' }, { img: 'https://images.unsplash.com/photo-1586788680434-30d324b2d46f?w=80&h=80&fit=crop', name: 'Drip Cake', desc: 'Glaçage coulant · Déco gourmande', price: '160 Dh' }] }, right: { tag: 'Événements & Réceptions', title: 'Service Traiteur', items: [{ img: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=80&h=80&fit=crop', name: 'Buffet Sucré', desc: 'Assortiment · Présentation soignée', price: 'Nous appeler' }, { img: 'https://images.unsplash.com/photo-1569864358642-9d1684040f43?w=80&h=80&fit=crop', name: 'Candy Bar', desc: 'Macarons · Cupcakes · Mini desserts', price: 'Devis gratuit' }, { img: 'https://images.unsplash.com/photo-1558326567-98ae2405596b?w=80&h=80&fit=crop', name: 'Box Cadeau', desc: 'Sélection macarons · Emballage luxe', price: '120 Dh' }, { img: 'https://images.unsplash.com/photo-1601979031925-424e53b6caaa?w=80&h=80&fit=crop', name: 'Table d\'Honneur', desc: 'Décoration florale · Pièce montée', price: 'Sur devis' }, { img: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=80&h=80&fit=crop', name: 'Pause Café Entreprise', desc: 'Viennoiseries · Café · Livraison', price: 'Nous appeler' }] } },
-  { left: { tag: 'Boissons Santé', title: 'Bien-être & Vitalité', items: [{ img: 'https://images.unsplash.com/photo-1610970881699-44a5587cabec?w=80&h=80&fit=crop', name: 'Jus Détox Vert', desc: 'Épinard · Concombre · Pomme · Citron', price: '32 Dh' }, { img: 'https://images.unsplash.com/photo-1553530979-7ee52a2670c4?w=80&h=80&fit=crop', name: 'Golden Latte', desc: 'Curcuma · Lait de coco · Miel', price: '35 Dh' }, { img: 'https://images.unsplash.com/photo-1621263764928-df1444c5e859?w=80&h=80&fit=crop', name: 'Eau Infusée', desc: 'Concombre · Menthe · Citron · Détox', price: '15 Dh' }, { img: 'https://images.unsplash.com/photo-1536256263959-770b48d82b0a?w=80&h=80&fit=crop', name: 'Matcha Glacé', desc: 'Matcha premium · Lait d\'amande · Glace', price: '38 Dh' }, { img: 'https://images.unsplash.com/photo-1572490122747-3b69b6b462ae?w=80&h=80&fit=crop', name: 'Shake Protéiné', desc: 'Banane · Beurre de cacahuète · Cacao', price: '40 Dh' }] }, right: { tag: 'Brunch & Week-end', title: 'Le Grand Brunch', items: [{ img: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=80&h=80&fit=crop', name: 'Formule Brunch Classique', desc: 'Café · Jus · Viennoiseries · Oeufs', price: '85 Dh' }, { img: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=80&h=80&fit=crop', name: 'Eggs Benedict', desc: 'Oeuf poché · Hollandaise · Saumon', price: '65 Dh' }, { img: 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=80&h=80&fit=crop', name: 'Avocado Toast', desc: 'Pain grillé · Avocat · Oeuf · Za\'atar', price: '55 Dh' }, { img: 'https://images.unsplash.com/photo-1509365465985-25d11c17e812?w=80&h=80&fit=crop', name: 'Pancakes Maison', desc: 'Myrtilles · Sirop d\'érable · Beurre', price: '50 Dh' }, { img: 'https://images.unsplash.com/photo-1607532941433-304659e8198a?w=80&h=80&fit=crop', name: 'Formule Brunch Premium', desc: 'Tout inclus · Champagne · Dessert', price: '150 Dh' }] } }
-];
-
-function buildPageContent(data) {
-  return `<span class="pg-tag">${data.tag}</span><div class="pg-title">${data.title}</div><div class="pg-items">${data.items.map(it => `<div class="mi"><div class="mi-photo"><img src="${it.img}" alt="${it.name}" loading="lazy"></div><div class="mi-info"><div class="mi-name">${it.name}</div><div class="mi-desc">${it.desc}</div></div><span class="mi-price">${it.price}</span></div>`).join('')}</div><div class="pg-foot">Monde Gourmand — Café &amp; Cake · Kénitra</div>`;
-}
-
-/* FLIP BOOK */
-let _isFlipping = false;
-let currentSpread = -1;
-
-function showSpread(idx, direction) {
-  const bookLeft = document.getElementById('bookLeft');
-  const bookRight = document.getElementById('bookRight');
-  if (!bookLeft || !bookRight) return;
-  if (_isFlipping) return;
-  let dir = direction;
-  if (dir === undefined) dir = idx > currentSpread ? 'right' : 'left';
-  if (idx === -1) {
-    _animateFlipCover(bookLeft, bookRight, dir, () => {
-      bookLeft.innerHTML = `<div class="page-face book-cover-face" id="coverFace" onclick="showSpread(0)"><div class="bc-photo"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=200&h=200&fit=crop" alt="Café"></div><div class="bc-title">Notre<em>Menu</em></div><div class="bc-divider"></div><div class="bc-hint">Cliquez pour ouvrir →</div></div>`;
-      bookRight.innerHTML = `<div class="page-face" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:linear-gradient(to left,#e8dcc8,#f6f0e2 4%,var(--white));"><img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=180&h=180&fit=crop" alt="Gâteau" style="width:80px;height:80px;border-radius:50%;object-fit:cover;opacity:.25;border:2px solid var(--gold);"><div style="font-family:var(--ff-head);font-size:.65rem;letter-spacing:4px;text-transform:uppercase;color:var(--text-light);opacity:.5;">Monde Gourmand</div></div>`;
-    });
-    currentSpread = -1;
-    return;
-  }
-  const sp = SPREADS[idx];
-  if (!sp) return;
-  const newLeftContent = `<div class="page-face">${buildPageContent(sp.left)}<div class="corner-fold"></div></div>`;
-  const newRightContent = `<div class="page-face">${buildPageContent(sp.right)}<div class="corner-fold" style="right:auto;left:0;border-left:1px solid #d8c8a8;border-right:none;box-shadow:4px 4px 12px rgba(0,0,0,.08);"></div></div>`;
-  _animateFlipPages(bookLeft, bookRight, dir, newLeftContent, newRightContent, () => { currentSpread = idx; });
-  document.querySelectorAll('.bnav-btn').forEach((b, i) => b.classList.toggle('on', i === idx));
-}
-
-function _animateFlipPages(leftEl, rightEl, dir, newLeftHTML, newRightHTML, onComplete) {
-  _isFlipping = true;
-  const bookPages = leftEl.closest('.bookPages') || leftEl.parentElement;
-  const isTurningRight = (dir === 'right');
-  let sourcePage, targetPage, newContent;
-  if (isTurningRight) { sourcePage = rightEl; targetPage = leftEl; newContent = newLeftHTML; }
-  else { sourcePage = leftEl; targetPage = rightEl; newContent = newRightHTML; }
-  const flipOverlay = document.createElement('div');
-  flipOverlay.style.cssText = `position:absolute;top:0;bottom:0;width:100%;background:${isTurningRight ? 'linear-gradient(to left,#e8dcc8,#f6f0e2 4%,#FEFCF5)' : 'linear-gradient(to right,#e8dcc8,#f6f0e2 4%,#FEFCF5)'};z-index:100;transform-origin:${isTurningRight ? 'left center' : 'right center'};transform-style:preserve-3d;pointer-events:none;box-shadow:${isTurningRight ? '-8px 0 20px rgba(0,0,0,.15)' : '8px 0 20px rgba(0,0,0,.15)'};border-radius:${isTurningRight ? '0 4px 4px 0' : '4px 0 0 4px'};`;
-  const frontFace = document.createElement('div');
-  frontFace.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;background:inherit;display:flex;align-items:center;justify-content:center;`;
-  frontFace.innerHTML = sourcePage.innerHTML;
-  const backFace = document.createElement('div');
-  backFace.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);background:${isTurningRight ? 'linear-gradient(to left,#e8dcc8,#f6f0e2 4%,#FEFCF5)' : 'linear-gradient(to right,#e8dcc8,#f6f0e2 4%,#FEFCF5)'};display:flex;align-items:center;justify-content:center;`;
-  backFace.innerHTML = newContent;
-  flipOverlay.appendChild(frontFace);
-  flipOverlay.appendChild(backFace);
-  const shadow = document.createElement('div');
-  shadow.style.cssText = `position:absolute;top:0;bottom:0;width:60px;${isTurningRight ? 'right: -60px' : 'left: -60px'};background:${isTurningRight ? 'linear-gradient(to left,rgba(0,0,0,.3),transparent)' : 'linear-gradient(to right,rgba(0,0,0,.3),transparent)'};z-index:99;pointer-events:none;opacity:0;transition:opacity 0.25s ease;`;
-  bookPages.style.position = 'relative';
-  bookPages.appendChild(flipOverlay);
-  bookPages.appendChild(shadow);
-  requestAnimationFrame(() => {
-    flipOverlay.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
-    shadow.style.opacity = '0.8';
-    if (isTurningRight) flipOverlay.style.transform = 'rotateY(-180deg)';
-    else flipOverlay.style.transform = 'rotateY(180deg)';
-    setTimeout(() => {
-      if (isTurningRight) leftEl.innerHTML = newLeftHTML;
-      else rightEl.innerHTML = newRightHTML;
-      flipOverlay.style.transition = '';
-      flipOverlay.remove();
-      shadow.remove();
-      _isFlipping = false;
-      if (onComplete) onComplete();
-    }, 620);
-  });
-}
-
-function _animateFlipCover(leftEl, rightEl, dir, onComplete) {
-  _isFlipping = true;
-  const bookPages = leftEl.closest('.bookPages') || leftEl.parentElement;
-  const flipOverlay = document.createElement('div');
-  flipOverlay.style.cssText = `position:absolute;top:0;bottom:0;width:50%;left:0;background:linear-gradient(150deg,#F0D080,#BF9B4E);z-index:100;transform-origin:left center;transform-style:preserve-3d;pointer-events:none;box-shadow:8px 0 20px rgba(28,16,5,.2);border-radius:0 4px 4px 0;`;
-  const frontFace = document.createElement('div');
-  frontFace.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;background:inherit;`;
-  frontFace.innerHTML = leftEl.innerHTML;
-  const backFace = document.createElement('div');
-  backFace.style.cssText = `position:absolute;inset:0;backface-visibility:hidden;transform:rotateY(180deg);background:linear-gradient(150deg,#F0D080,#BF9B4E);display:flex;align-items:center;justify-content:center;`;
-  backFace.innerHTML = `<div style="text-align:center;color:#1C1005;"><span style="font-size:2rem;">📖</span><div style="margin-top:10px;">Monde Gourmand</div></div>`;
-  flipOverlay.appendChild(frontFace);
-  flipOverlay.appendChild(backFace);
-  bookPages.appendChild(flipOverlay);
-  requestAnimationFrame(() => {
-    flipOverlay.style.transition = 'transform 0.55s cubic-bezier(0.23, 1, 0.32, 1)';
-    flipOverlay.style.transform = 'rotateY(-180deg)';
-    setTimeout(() => { onComplete(); flipOverlay.remove(); _isFlipping = false; }, 580);
-  });
-}
-
-function prevSpread() { if (_isFlipping) return; const newIdx = currentSpread <= 0 ? SPREADS.length - 1 : currentSpread - 1; showSpread(newIdx, 'left'); }
-function nextSpread() { if (_isFlipping) return; const newIdx = currentSpread >= SPREADS.length - 1 ? 0 : currentSpread + 1; showSpread(newIdx, 'right'); }
-
-document.addEventListener('DOMContentLoaded', () => {
-  showSpread(-1);
-  document.querySelectorAll('.bnav-btn').forEach((btn, i) => btn.addEventListener('click', () => showSpread(i)));
-  document.getElementById('bPrev')?.addEventListener('click', prevSpread);
-  document.getElementById('bNext')?.addEventListener('click', nextSpread);
-  document.querySelectorAll('.menu-thumb[onclick]').forEach(image => {
-    image.setAttribute('role', 'button');
-    image.tabIndex = 0;
-    image.setAttribute('aria-label', `Agrandir ${image.alt || 'le produit'}`);
-    image.addEventListener('keydown', event => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        image.click();
-      }
-    });
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'ArrowRight') nextSpread(); if (e.key === 'ArrowLeft') prevSpread(); });
-});
-
 /* GALLERY CARROUSEL */
 (function () {
   const track = document.getElementById('gTrack');
@@ -336,88 +211,11 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 
 /* ── PRODUCTS ────────────────────────────────────────────── */
-const DEFAULT_PRODUCTS = [
-  {"id": 1, "name": "New Year", "img": "images/gateau/bucherouge.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": true, "isNew": false},
-  {"id": "mg-birthday", "name": "Birthday", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/birthday-1791474752022.jpg", "price": 450, "cat": "Gâteaux", "desc": "Gâteau d'anniversaire", "promo": false, "isNew": false},
-  {"id": 2, "name": "Bûche forêt-noire", "img": "images/gateau/noel3.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": true, "isNew": false},
-  {"id": 21, "name": "Gâteau New Year", "img": "images/gateau/newyear.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": "mg-happy-birthday", "name": "Happy Birthday", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/happy-birthday-1791544692099.jpg", "price": 250, "cat": "Gâteaux", "desc": "", "promo": false, "isNew": false},
-  {"id": 25, "name": "Gâteau amande", "img": "images/gateau/mariage2.webp", "price": 200, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": "mg-number-cake", "name": "Number Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/cake-number-1791890800668.jpg", "price": 250, "cat": "Gâteaux", "desc": "", "promo": false, "isNew": false},
-  {"id": 26, "name": "Bûche New Year", "img": "images/gateau/buchedamour.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": 30, "name": "Bûche de Noël", "img": "images/gateau/buchenoel.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": 32, "name": "Bûche de Noël", "img": "images/gateau/noel2.webp", "price": 150, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": 35, "name": "Gâteau glacé", "img": "images/gateau/love.webp", "price": 120, "cat": "Gâteaux", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": "mg-fraisier-royal", "name": "Fraisier royal", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/hello-chanel-1792075878791.png", "price": 350, "cat": "Gâteaux", "desc": "", "promo": false, "isNew": false},
-  {"id": "mg-happy-new-year", "name": "Happy New Year", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/happy-new-year-1791891085514.jpg", "price": 180, "cat": "Gâteaux", "desc": "", "promo": false, "isNew": false},
-  {"id": "mg-heart-of-love", "name": "Heart of Love", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/heart-of-love-1791544929847.jpg", "price": 200, "cat": "Gâteaux", "desc": "", "promo": false, "isNew": false},
-  {"id": 42, "name": "Trompe-l'œil framboise", "img": "images/pat/fromboise.webp", "price": 22, "cat": "Pâtisseries", "desc": "Framboise", "promo": false, "isNew": true},
-  {"id": 44, "name": "Trompe-l'œil mangue", "img": "images/pat/mangue.webp", "price": 22, "cat": "Pâtisseries", "desc": "Mangue", "promo": false, "isNew": true},
-  {"id": 46, "name": "Pistachio", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/pistachio-1792757079102.jpg", "price": 20, "cat": "Pâtisseries", "desc": "Pistache et framboise", "promo": false, "isNew": true},
-  {"id": "mg-trompe-l-oeil-cacahuete", "name": "Trompe-l'œil cacahuète", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/trompe-l-il-cacahuete-1792770631279.jpg", "price": 22, "cat": "Pâtisseries", "desc": "Cacahuète", "promo": false, "isNew": true},
-  {"id": 3, "name": "Trompe-l'œil citron", "img": "images/pat/citron.webp", "price": 25, "cat": "Pâtisseries", "desc": "Citron", "promo": false, "isNew": true},
-  {"id": "mg-trompe-l-oeil-datte", "name": "Trompe-l'œil datte", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/trompe-l-oeil-datte-1792756215182.jpg", "price": 20, "cat": "Pâtisseries", "desc": "Datte, chocolat et vanille", "promo": false, "isNew": true},
-  {"id": 37, "name": "Trompe-l'œil pistache", "img": "images/pat/vert.webp", "price": 26, "cat": "Pâtisseries", "desc": "Pistache", "promo": false, "isNew": true},
-  {"id": "mg-cheesecake", "name": "Cheesecake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/cheese-cake-1791332254515.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Citron, framboise ou pistache", "promo": false, "isNew": true},
-  {"id": "mg-red-velvet", "name": "Red velvet", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/redvelvet-1791474200250.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Red velvet", "promo": false, "isNew": false},
-  {"id": 18, "name": "Trompe-l'œil poire", "img": "images/pat/poire.webp", "price": 22, "cat": "Pâtisseries", "desc": "Poire", "promo": false, "isNew": false},
-  {"id": 19, "name": "Trompe-l'œil pomme", "img": "images/pat/pomme.webp", "price": 22, "cat": "Pâtisseries", "desc": "Pomme", "promo": false, "isNew": true},
-  {"id": "mg-brownies", "name": "Brownies", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/brownies-1791543714688.jpg", "price": 15, "cat": "Pâtisseries", "desc": "Chocolat noir", "promo": false, "isNew": false},
-  {"id": 38, "name": "Amande", "img": "images/pat/amande.webp", "price": 20, "cat": "Pâtisseries", "desc": "Amande", "promo": false, "isNew": false},
-  {"id": 39, "name": "Cookie framboise", "img": "images/pat/cockie.webp", "price": 18, "cat": "Pâtisseries", "desc": "Framboise", "promo": false, "isNew": false},
-  {"id": 40, "name": "Cookie Lotus", "img": "images/pat/cockieb.webp", "price": 18, "cat": "Pâtisseries", "desc": "Lotus", "promo": false, "isNew": true},
-  {"id": 41, "name": "Cookie chocolat", "img": "images/pat/cockien.webp", "price": 18, "cat": "Pâtisseries", "desc": "Chocolat", "promo": false, "isNew": false},
-  {"id": 43, "name": "Tarte aux fruits", "img": "images/pat/fruis.webp", "price": 20, "cat": "Pâtisseries", "desc": "Fruits", "promo": false, "isNew": false},
-  {"id": "mg-cake-carotte", "name": "Cake carotte", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/cake-carotte-1791543743660.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Carotte", "promo": false, "isNew": false},
-  {"id": "mg-cheesecake-oreo-san-sebastian", "name": "Cheesecake Oreo San Sebastián", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/cheese-cake-oreo-san-sebastian-1791543805485.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Oreo et San Sebastián", "promo": false, "isNew": false},
-  {"id": "mg-foret-noire", "name": "Forêt-noire", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/foret-noire-1791332845477.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Cake forêt-noire", "promo": false, "isNew": false},
-  {"id": "mg-glamour", "name": "Glamour", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/glamour-1791461628728.jpg", "price": 22, "cat": "Pâtisseries", "desc": "Glamour", "promo": false, "isNew": false},
-  {"id": "mg-mystery-gift", "name": "Mystery Gift", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/brownies-1791543170493.jpg", "price": 25, "cat": "Pâtisseries", "desc": "Vanille, framboise et croustillant", "promo": false, "isNew": false},
-  {"id": "mg-snickers", "name": "Snickers", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/snickers-1791461526849.jpg", "price": 20, "cat": "Pâtisseries", "desc": "Snickers", "promo": false, "isNew": false},
-  {"id": "mg-trompe-l-oeil-cafe", "name": "Trompe-l'œil café", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/trompe-l-oeil-cafe-1791474306096.jpg", "price": 22, "cat": "Pâtisseries", "desc": "Café", "promo": false, "isNew": false},
-  {"id": 14, "name": "Mojito fruit de la passion", "img": "images/boi/fruis.webp", "price": 28, "cat": "Boissons", "desc": "Fruit de la passion", "promo": false, "isNew": false},
-  {"id": 15, "name": "Mojito virgin", "img": "images/boi/mokhitofruispassion.webp", "price": 25, "cat": "Boissons", "desc": "Menthe", "promo": false, "isNew": false},
-  {"id": 16, "name": "Mojito fruits rouges", "img": "images/boi/fruisrouge.webp", "price": 28, "cat": "Boissons", "desc": "Fruits rouges", "promo": false, "isNew": false},
-  {"id": 20, "name": "Piña colada", "img": "images/cocktail/pina.webp", "price": 28, "cat": "Boissons", "desc": "Coco et ananas", "promo": false, "isNew": false},
-  {"id": 23, "name": "Spring Blue Mojito", "img": "images/cocktail/SPRINGBLUEMOJITO.WEBP", "price": 45, "cat": "Boissons", "desc": "À base de Red Bull", "promo": false, "isNew": false},
-  {"id": 50, "name": "Milkshake caramel", "img": "images/MILKSHAKE/MILKSHAKECARAMEL.webp", "price": 28, "cat": "Boissons", "desc": "Caramel", "promo": false, "isNew": false},
-  {"id": 51, "name": "Milkshake KitKat", "img": "images/MILKSHAKE/KITKAT.webp", "price": 30, "cat": "Boissons", "desc": "KitKat", "promo": false, "isNew": false},
-  {"id": 52, "name": "Milkshake chocolat", "img": "images/MILKSHAKE/MILKSHAKECHOCOLAT.webp", "price": 28, "cat": "Boissons", "desc": "Chocolat", "promo": false, "isNew": false},
-  {"id": 53, "name": "Milkshake fraise", "img": "images/MILKSHAKE/MILKSHAKEFRAISE.webp", "price": 28, "cat": "Boissons", "desc": "Fraise", "promo": false, "isNew": false},
-  {"id": 54, "name": "Milkshake Oreo", "img": "images/MILKSHAKE/MILKSHAKEOERO.webp", "price": 30, "cat": "Boissons", "desc": "Oreo", "promo": false, "isNew": false},
-  {"id": 55, "name": "Milkshake vanille", "img": "images/MILKSHAKE/milkshakevanille.webp", "price": 28, "cat": "Boissons", "desc": "Vanille", "promo": false, "isNew": false},
-  {"id": "mg-aqua-mermaid-cake", "name": "Aqua Mermaid Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-3860-1-1792073890462.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-blanche-neige-cake", "name": "Blanche-Neige Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-7023-1791558157444.jpg", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": 31, "name": "Frozen Cake", "img": "images/gateau/frozene.webp", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": 29, "name": "Happy Birthday Lina", "img": "images/gateau/birthdaylina.webp", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": "mg-jad-is-here", "name": "Jad Is Here", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/jad-is-here-1791974962708.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-sweet-kitty-cake", "name": "Sweet Kitty Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/sweet-kitty-cake-1792073297649.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": 13, "name": "Douceur de rose", "img": "images/gateau/happyb.webp", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": 17, "name": "Cake design fruits", "img": "images/gateau/FRAMBOISE.webp", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": true},
-  {"id": 24, "name": "Cake design", "img": "images/gateau/goodluck.webp", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": 27, "name": "Cake design Birthday", "img": "images/gateau/birthday.webp", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": 28, "name": "Cake design mariage", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/cake-design-mariage-1791545764777.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": 12, "name": "Cake design", "img": "images/gateau/eidmobarak.webp", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": true},
-  {"id": 34, "name": "Cake design", "img": "images/gateau/redheart.webp", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-animalerie-cake", "name": "Animalerie Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/animalerie-cake-design-1791544522272.jpg", "price": 650, "cat": "Cake design", "desc": "À partir de", "promo": false, "isNew": false},
-  {"id": "mg-barbie-pink-princess", "name": "Barbie Pink Princess", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/barbie-pink-princess-1792064206709.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-celebration-cake", "name": "Celebration Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-3852-1792065974483.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-congrats-cake", "name": "Congrats Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/congrats-cake-1792074536836.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-enchanted-sea-cake", "name": "Enchanted Sea Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-3872-1792074779190.png", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": "mg-golden-lotus-cake", "name": "Golden Lotus Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-3848-1792074976567.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-graduation-celebration-cake", "name": "Graduation Celebration Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/graduation-celebration-cake-1792074336925.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-hello-chanel", "name": "Hello Chanel", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/hello-chanel-1792075878791.png", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": "mg-ocean-princess-cake", "name": "Ocean Princess Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/ocean-princess-cake-1792073599228.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-omra-mubarak-cake", "name": "Omra Mubarak Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/img-3862-2-1792077511647.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-profession-cake", "name": "Profession Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/collage-3-gateaux-format-carre-1792079731875.png", "price": 800, "cat": "Cake design", "desc": "Pour 10 à 12 personnes", "promo": false, "isNew": false},
-  {"id": "mg-royal-khitan-cake", "name": "Royal Khitan Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/royal-khitan-cake-1792075717124.png", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-  {"id": "mg-royal-romance", "name": "Royal Romance", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/c-1791544846825.jpg", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-sonic-world", "name": "Sonic World", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/sonic-world-1792063950493.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-sweet-minnie-cake", "name": "Sweet Minnie Cake", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/sweet-minnie-cake-1792073752389.png", "price": 650, "cat": "Cake design", "desc": "Pour 10 à 12 personnes · à partir de", "promo": false, "isNew": false},
-  {"id": "mg-unicorn-fantasy", "name": "Unicorn Fantasy", "img": "https://bqesiaketxtzfueeuwpc.supabase.co/storage/v1/object/public/product-images/products/gateau/unicorn-fantasy-1792065711359.png", "price": 1200, "cat": "Cake design", "desc": "Pour 20 à 25 personnes", "promo": false, "isNew": false},
-];
-let PRODUCTS = DEFAULT_PRODUCTS.slice();
+let PRODUCTS = [];
 let activeProductCat = 'all';
+let catalogueLoaded = false;
+let catalogueLoading = false;
+let catalogueError = false;
 
 function mgCategoryKey(value) {
   return String(value || '').trim().toLocaleLowerCase('fr');
@@ -452,7 +250,12 @@ function renderProductFilters(categories, products) {
     }
   });
 
-  if (!names.length) return;
+  bar.style.display = names.length ? '' : 'none';
+  if (!names.length) {
+    bar.innerHTML = '';
+    activeProductCat = 'all';
+    return;
+  }
   const activeKey = mgCategoryKey(activeProductCat);
   const activeExists = activeProductCat === 'all' || names.some(name => mgCategoryKey(name) === activeKey);
   if (!activeExists) activeProductCat = 'all';
@@ -495,7 +298,7 @@ function renderProducts(cat) {
   activeProductCat = cat || activeProductCat || 'all';
   const list = activeProductCat === 'all' ? PRODUCTS : PRODUCTS.filter(p => mgCategoryKey(p.cat) === mgCategoryKey(activeProductCat));
   if (!list.length) {
-    grid.innerHTML = '<div class="empty-st">Aucun produit dans cette catégorie.</div>';
+    grid.innerHTML = `<p class="catalogue-status" role="status">${activeProductCat === 'all' ? 'Aucun produit disponible pour le moment.' : 'Aucun produit dans cette catégorie.'}</p>`;
     return;
   }
   grid.innerHTML = list.map((p, i) => {
@@ -632,7 +435,7 @@ function normalizeProduct(row) {
 
 function renderProductStructuredData(products) {
   let script = document.getElementById('productStructuredData');
-  if (!document.getElementById('page-gateau')?.classList.contains('active')) {
+  if (!catalogueLoaded || !document.getElementById('page-gateau')?.classList.contains('active')) {
     script?.remove();
     return;
   }
@@ -681,18 +484,12 @@ function renderProductStructuredData(products) {
 }
 
 function renderDynamicMenu(rows, categories) {
-  const section = document.querySelector('#page-menu .menu-page-sec');
-  if (!section || !rows.length) return;
-  let dyn = document.getElementById('supabaseMenuCategories');
-  if (!dyn) {
-    dyn = document.createElement('div');
-    dyn.id = 'supabaseMenuCategories';
+  const dyn = document.getElementById('supabaseMenuCategories');
+  if (!dyn) return;
+  if (!rows.length) {
+    renderCatalogueNotice(dyn, 'Aucun article de menu disponible pour le moment.');
+    return;
   }
-  const firstCategory = section.querySelector(':scope > .menu-category');
-  const directCta = Array.from(section.children).find(el => el.classList?.contains('menu-cta'));
-  section.insertBefore(dyn, firstCategory || directCta || null);
-  dyn.style.display = 'block';
-  section.querySelectorAll(':scope > .menu-category').forEach(el => { el.style.display = 'none'; });
   const groups = rows.reduce((acc, row) => {
     const key = row.category || 'Menu';
     if (!acc[key]) acc[key] = [];
@@ -721,28 +518,49 @@ function renderDynamicMenu(rows, categories) {
   setTimeout(doReveal, 80);
 }
 
+function renderCatalogueNotice(container, message, retry = false) {
+  if (!container) return;
+  const retryButton = retry ? '<button type="button" class="catalogue-retry" data-retry-catalogue>Réessayer</button>' : '';
+  container.innerHTML = `<div class="catalogue-status" role="status">${mgEsc(message)}${retryButton}</div>`;
+}
+
+function syncCartWithProducts() {
+  const byId = new Map(PRODUCTS.map(product => [String(product.id), product]));
+  const next = cart.flatMap(item => {
+    const product = byId.get(String(item.id));
+    return product ? [{ ...item, name: product.name, img: product.img, price: product.price, desc: product.desc }] : [];
+  });
+  if (JSON.stringify(next) !== JSON.stringify(cart)) {
+    cart = next;
+    saveCart();
+  }
+  if (document.getElementById('cartLayout')) renderCart();
+}
+
 async function loadPublicProducts() {
-  if (!mgHasSupabase()) return;
-  const [productsResult, categoriesResult] = await Promise.all([
-    mgDb
-      .from('products')
-      .select('*')
-      .eq('is_active', true)
-      .order('collection', { ascending: true })
-      .order('category', { ascending: true })
-      .order('sort_order', { ascending: true }),
-    mgDb
-      .from('product_categories')
-      .select('*')
-      .eq('is_active', true)
-      .order('collection', { ascending: true })
-      .order('sort_order', { ascending: true })
-  ]);
-  const data = productsResult.data || [];
-  if (productsResult.error || !data.length) return;
-  const categories = categoriesResult.data || [];
-  const gateaux = data.filter(row => row.collection === 'gateau').map(normalizeProduct);
-  if (gateaux.length) {
+  if (catalogueLoading) return;
+  catalogueLoading = true;
+  catalogueLoaded = false;
+  catalogueError = false;
+  renderCatalogueNotice(document.getElementById('pgrid'), 'Chargement des produits...');
+  renderCatalogueNotice(document.getElementById('supabaseMenuCategories'), 'Chargement du menu...');
+  if (document.getElementById('cartLayout')) renderCart();
+  try {
+    if (!mgHasSupabase()) throw new Error('Configuration Supabase manquante');
+    const [productsResult, categoriesResult] = await Promise.all([
+      mgDb.from('products').select('*').eq('is_active', true)
+        .order('collection', { ascending: true })
+        .order('category', { ascending: true })
+        .order('sort_order', { ascending: true }),
+      mgDb.from('product_categories').select('*').eq('is_active', true)
+        .order('collection', { ascending: true })
+        .order('sort_order', { ascending: true })
+    ]);
+    if (productsResult.error) throw productsResult.error;
+    if (categoriesResult.error) console.warn('Catégories Supabase indisponibles:', categoriesResult.error.message);
+    const data = productsResult.data || [];
+    const categories = categoriesResult.data || [];
+    const gateaux = data.filter(row => row.collection === 'gateau').map(normalizeProduct);
     const categoryOrder = new Map(
       categories
         .filter(category => category.collection === 'gateau')
@@ -752,15 +570,30 @@ async function loadPublicProducts() {
       const byCategory = (categoryOrder.get(mgCategoryKey(a.cat)) ?? 1000) - (categoryOrder.get(mgCategoryKey(b.cat)) ?? 1000);
       return byCategory || a.sortOrder - b.sortOrder || a.name.localeCompare(b.name, 'fr');
     });
+    catalogueLoaded = true;
     renderProductFilters(categories, PRODUCTS);
     renderProducts(activeProductCat);
     renderProductStructuredData(PRODUCTS);
+    renderDynamicMenu(data.filter(row => row.collection === 'menu'), categories);
+    syncCartWithProducts();
+  } catch (error) {
+    console.warn('Catalogue Supabase indisponible:', error.message || error);
+    PRODUCTS = [];
+    catalogueLoaded = false;
+    catalogueError = true;
+    renderProductFilters([], PRODUCTS);
+    renderCatalogueNotice(document.getElementById('pgrid'), 'Catalogue momentanément indisponible.', true);
+    renderCatalogueNotice(document.getElementById('supabaseMenuCategories'), 'Menu momentanément indisponible.', true);
+    document.getElementById('productStructuredData')?.remove();
+    if (document.getElementById('cartLayout')) renderCart();
+  } finally {
+    catalogueLoading = false;
   }
-  renderDynamicMenu(data.filter(row => row.collection === 'menu'), categories);
 }
 
-renderProducts('all');
-renderProductStructuredData(PRODUCTS);
+document.addEventListener('click', event => {
+  if (event.target.closest('[data-retry-catalogue]')) loadPublicProducts();
+});
 loadPublicProducts();
 
 function enhanceOrderForm() {
@@ -837,6 +670,10 @@ function renderCart() {
   const layout = document.getElementById('cartLayout');
   if (!layout) return;
   if (!cart || !cart.length) { layout.innerHTML = `<div class="cart-empty"><div class="cart-empty-ico">🛒</div><p class="cart-empty-h">Votre panier est vide</p></div>`; return; }
+  if (!catalogueLoaded) {
+    renderCatalogueNotice(layout, catalogueError ? 'Catalogue momentanément indisponible. Votre panier sera actualisé dès le retour du service.' : 'Synchronisation du panier...', catalogueError);
+    return;
+  }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const qty = cart.reduce((s, i) => s + i.qty, 0);
   const items = cart.map((it, idx) => {
@@ -854,6 +691,7 @@ function renderCart() {
 function doQty(id, d) { changeQty(id, d); renderCart(); }
 function doDel(id) { removeFromCart(id); renderCart(); }
 async function sendWA() {
+  if (!catalogueLoaded) { showToast('⚠️ Catalogue indisponible, veuillez réessayer'); return; }
   const fn = document.getElementById('fn')?.value?.trim() || '';
   const ln = document.getElementById('ln')?.value?.trim() || '';
   const ad = document.getElementById('ad')?.value?.trim() || '';
@@ -1048,11 +886,10 @@ function showPage(id, options = {}) {
     });
     renderProductStructuredData(PRODUCTS);
     window.scrollTo({ top: 0, behavior: options.instant ? 'auto' : 'smooth' });
-    if (id === 'gateau') renderProducts('all');
+    if (id === 'gateau' && catalogueLoaded) renderProducts('all');
     if (id === 'panier') renderCart();
     if (id === 'menu') { setTimeout(doReveal, 100); }
     if (id === 'about') { setTimeout(() => { window.refreshGallery?.(); }, 80); }
-    if (id === 'home') { showSpread(-1); document.querySelectorAll('.bnav-btn').forEach((btn, i) => btn.addEventListener('click', () => showSpread(i))); }
     if (id === 'wheel') { setTimeout(() => { if (typeof initWheel === 'function') initWheel(); else window._pendingWheelInit = true; setTimeout(doReveal, 100); }, 50); }
     const anchor = options.anchor || (!normalizePageId(window.location.hash) ? window.location.hash.slice(1) : '');
     if (anchor) setTimeout(() => document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 80);
@@ -1381,5 +1218,3 @@ setTimeout(() => {
   });
   initSignatureCanvas();
 })();
-
-console.log('✅ Script chargé - ' + PRODUCTS.length + ' produits disponibles');
