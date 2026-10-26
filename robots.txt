@@ -3,6 +3,7 @@ Allow: /
 Disallow: /panier
 Disallow: /insert-
 Disallow: /supabase-
+Allow: /supabase-config.js
 
 User-agent: OAI-SearchBot
 Allow: /
