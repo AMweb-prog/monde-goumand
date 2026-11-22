@@ -78,6 +78,9 @@ for (const [id, seo] of Object.entries(ROUTES)) {
   // Chaque route a son propre document : les liens internes doivent naviguer nativement.
   html = html.replace(/\s+onclick="showPage\([^"]*"/g, '');
 
+  // L'image du hero n'existe que sur l'accueil : pas de préchargement inutile ailleurs.
+  if (id !== 'home') html = html.replace(/\n<link id="heroPreload"[^>]*>/, '');
+
   html = replaceOnce(html, /<title>[^<]*<\/title>/, `<title>${esc(seo.title)}</title>`, '<title>');
   html = setMeta(html, 'id="metaDescription"', seo.description);
   html = setMeta(html, 'id="metaRobots"', robots);

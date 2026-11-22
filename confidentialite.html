@@ -59,6 +59,15 @@ main{flex:1;width:100%}
 .foot a{color:rgba(254,252,245,.85)}
 .foot a:hover{color:#fff}
 @media (max-width:640px){.top{flex-direction:column;align-items:flex-start}.doc dl{grid-template-columns:1fr}.doc dt{padding-top:10px}}
+/* AMweb credit */
+.footer-credit { display: flex; justify-content: center; padding: 0 0 16px; }
+.foot .footer-credit a { display: inline-flex; align-items: center; gap: 6px; color: rgba(254,252,245,.7); font-size: calc(-1px + .82rem); font-weight: 600; letter-spacing: .01em; text-decoration: none; transition: color .2s; }
+.foot .footer-credit a:hover, .foot .footer-credit a:focus-visible { color: #fff; text-decoration: none; }
+.footer-credit-heart { display: inline-block; font-size: 1.1em; line-height: 1; animation: footerHeart 1.8s ease-in-out infinite; }
+.footer-credit img { display: block; width: auto; height: .88em; margin-left: 1px; transition: transform .25s, opacity .25s; }
+.footer-credit a:hover img, .footer-credit a:focus-visible img { transform: translateY(-1px) scale(1.04); }
+@keyframes footerHeart { 0%, 60%, 100% { transform: scale(1); } 30% { transform: scale(1.22); } }
+@media (prefers-reduced-motion: reduce) { .footer-credit-heart { animation: none; } .footer-credit img { transition: none; } }
 </style>
 </head>
 <body>
@@ -73,14 +82,14 @@ main{flex:1;width:100%}
 <section class="hero">
   <span class="tag">Vos données</span>
   <h1>Politique de <em>confidentialité</em></h1>
-  <p class="updated">Dernière mise à jour : 24 octobre 2026</p>
+  <p class="updated">Dernière mise à jour : 22 novembre 2026</p>
 </section>
 <div class="doc">
 <p>Cette politique explique quelles informations Monde Gourmand recueille sur ce site, pourquoi, et comment exercer vos droits. Elle s'applique au site mondegourmand.com.</p>
 
 <h2>Responsable du traitement</h2>
 <p>Monde Gourmand — Café &amp; Cake, 126 Avenue Mohamed El Qori, Kénitra, Maroc. Contact : <a href="mailto:mondegourmand.contact@gmail.com">mondegourmand.contact@gmail.com</a> · <a href="tel:+212530322681">+212 530 322 681</a>.</p>
-<p>Ce traitement a fait l'objet d'une déclaration auprès de la Commission nationale de contrôle de la protection des données à caractère personnel (CNDP) sous le n° <mark class="todo">[À compléter : numéro de récépissé CNDP]</mark>.</p>
+
 
 <h2>Données que nous recueillons</h2>
 <h3>Lors d'une commande (page Panier)</h3>
@@ -117,7 +126,8 @@ main{flex:1;width:100%}
 <ul>
   <li>l'équipe Monde Gourmand chargée des commandes et des réservations ;</li>
   <li>nos prestataires techniques, uniquement pour faire fonctionner le site : Vercel (hébergement du site) et Supabase (base de données des commandes et réservations). Ces prestataires peuvent stocker les données hors du Maroc ;</li>
-  <li>Google, pour les statistiques de fréquentation et la carte.</li>
+  <li>Google, pour les statistiques de fréquentation et la carte ;</li>
+  <li>WhatsApp (Meta), uniquement si vous choisissez de nous écrire via WhatsApp.</li>
 </ul>
 <p>Les commandes passées via Glovo sont soumises à la politique de confidentialité de Glovo.</p>
 
@@ -142,8 +152,14 @@ main{flex:1;width:100%}
 <footer class="foot">
   © 2026 Monde Gourmand · Café &amp; Cake · 126 Av. Mohamed El Qori, Kénitra, Maroc
   <nav aria-label="Informations légales">
-    <a href="/mentions-legales">Mentions légales</a><a href="/confidentialite">Confidentialité</a><a href="/cgv">Conditions de vente</a><a href="tel:+212530322681">+212 530 322 681</a>
+    <a href="/">Accueil</a><a href="tel:+212530322681">+212 530 322 681</a>
   </nav>
+  <div class="footer-credit" style="margin-top:14px;padding:0">
+    <a href="https://www.amweb.ma/" target="_blank" rel="noopener" aria-label="Made with love by AMweb (amweb.ma)">
+      <span>Made with</span><span class="footer-credit-heart" aria-hidden="true">❤️</span><span>by</span>
+      <img src="/images/amweb-logo.svg" alt="AMweb" width="59" height="11" loading="lazy" decoding="async">
+    </a>
+  </div>
 </footer>
 </body>
 </html>

@@ -8,19 +8,35 @@ Allow: /supabase-config.js
 User-agent: OAI-SearchBot
 Allow: /
 Disallow: /panier
-
-User-agent: ChatGPT-User
-Allow: /
+Disallow: /insert-
+Disallow: /supabase-
+Allow: /supabase-config.js
 
 User-agent: Claude-SearchBot
 Allow: /
 Disallow: /panier
-
-User-agent: Claude-User
-Allow: /
+Disallow: /insert-
+Disallow: /supabase-
+Allow: /supabase-config.js
 
 User-agent: PerplexityBot
 Allow: /
 Disallow: /panier
+Disallow: /insert-
+Disallow: /supabase-
+Allow: /supabase-config.js
+
+# Agents agissant pour un utilisateur : le panier reste accessible pour qu'ils puissent commander.
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /insert-
+Disallow: /supabase-
+Allow: /supabase-config.js
+
+User-agent: Claude-User
+Allow: /
+Disallow: /insert-
+Disallow: /supabase-
+Allow: /supabase-config.js
 
 Sitemap: https://www.mondegourmand.com/sitemap.xml
