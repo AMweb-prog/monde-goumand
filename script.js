@@ -307,7 +307,7 @@ function renderProducts(cat) {
       ${p.promo ? '<div class="promo-badge">PROMO</div>' : ''}
       ${p.isNew ? '<div class="new-badge">NOUVEAU</div>' : ''}
       <div class="pimg" role="button" tabindex="0" aria-label="Agrandir ${mgEsc(p.name)}" onclick="openLB('${id}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLB('${id}');}">
-        <img src="${mgEsc(p.img)}" alt="${mgEsc(p.name)}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
+        <img src="${mgEsc(p.img)}" alt="${mgEsc(p.name)}" width="300" height="230" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;object-position:center;display:block;">
         <div class="pimg-ov"><span class="pimg-zoom">+</span></div>
       </div>
       <div class="pbody">

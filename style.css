@@ -170,6 +170,7 @@ footer::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;back
 .hero-title{font-family:var(--ff-head);font-size:clamp(3.6rem,10vw,8.5rem);font-weight:700;color:var(--cream);line-height:.9;letter-spacing:-1px;margin-bottom:24px;opacity:0;animation:aup .9s .45s forwards;}
 .hero-title span{display:block;}
 .hero-title em{font-family:var(--ff-body);font-style:italic;color:var(--gold2);font-weight:300;font-size:1.15em;}
+.hero-title .hero-kw{font-family:var(--ff-body);font-size:clamp(.8rem,1.5vw,1.05rem);font-weight:500;letter-spacing:4px;text-transform:uppercase;line-height:1.4;margin-top:20px;color:var(--cream);}
 .hero-sub{font-family:var(--ff-body);font-size:clamp(1rem,2.2vw,1.4rem);color:rgba(247,240,220,.55);letter-spacing:2px;font-style:italic;font-weight:300;margin-bottom:54px;opacity:0;animation:aup .9s .7s forwards;}
 .hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;opacity:0;animation:aup .9s .95s forwards;}
 .scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:aup .9s 1.4s forwards;}
@@ -1315,3 +1316,14 @@ footer .ft-row{padding:8px 0;}
 .ft-legal{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 22px;}
 .ft-legal a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(240,208,128,.35);transition:color .3s;}
 .ft-legal a:hover{color:#fff;}
+
+/* Barre d'actions rapides (mobile) */
+.mob-actions{display:none;}
+@media(max-width:700px){
+  .mob-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;position:fixed;left:0;right:0;bottom:0;z-index:996;padding:8px 10px calc(8px + env(safe-area-inset-bottom));background:rgba(254,252,245,.97);border-top:1px solid rgba(191,155,78,.35);box-shadow:0 -6px 20px rgba(28,16,5,.08);}
+  .ma-btn{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;font-family:var(--ff-ui);font-size:.72rem;font-weight:600;letter-spacing:.4px;text-decoration:none;color:var(--dark);border:1px solid rgba(191,155,78,.45);background:transparent;}
+  .ma-wa{background:#1f8f4e;border-color:#1f8f4e;color:#fff;}
+  .ma-main{background:var(--gold);border-color:var(--gold);color:var(--dark);}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom));}
+  #toast{bottom:calc(80px + env(safe-area-inset-bottom));}
+}
