@@ -1338,3 +1338,5 @@ footer .ft-row{padding:8px 0;}
 .footer-credit a:hover img, .footer-credit a:focus-visible img { transform: translateY(-1px) scale(1.04); }
 @keyframes footerHeart { 0%, 60%, 100% { transform: scale(1); } 30% { transform: scale(1.22); } }
 @media (prefers-reduced-motion: reduce) { .footer-credit-heart { animation: none; } .footer-credit img { transition: none; } }
+/* Bouton WhatsApp du pop-up de confirmation */
+.confirm-popup-wa{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#1f8f4e !important;border-color:#1f8f4e !important;color:#fff !important;margin-bottom:10px;}

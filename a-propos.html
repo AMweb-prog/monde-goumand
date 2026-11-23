@@ -234,7 +234,7 @@ window.MG_ROUTE_PATHS = { '/': 'home', '/index.html': 'home', '/a-propos': 'abou
 }
 </script>
 
-<link rel="stylesheet" href="style.css?v=20261122-2">
+<link rel="stylesheet" href="style.css?v=20261123-1">
 <style>
 .page-section{display:none}
 .page-section.active{display:block}
@@ -256,7 +256,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="confirm-popup-ico">✅</div>
     <div class="confirm-popup-title" id="confirmPopupTitle" data-fr="Commande envoyée !" data-en="Order sent!">Commande envoyée !</div>
     <p class="confirm-popup-txt" id="confirmPopupText" data-fr="Pour un gâteau personnalisé, votre commande sera prête dans un délai de 48 h après son envoi." data-en="For a custom cake, your order will be ready within 48 hours after it is submitted.">Pour un gâteau personnalisé, votre commande sera prête dans un délai de 48 h après son envoi.</p>
+    <p class="confirm-popup-txt" data-fr="WhatsApp s'ouvre avec votre commande : appuyez sur Envoyer pour nous la transmettre." data-en="WhatsApp opens with your order: tap Send to pass it on to us.">WhatsApp s'ouvre avec votre commande : appuyez sur Envoyer pour nous la transmettre.</p>
+    <a class="confirm-popup-btn confirm-popup-wa" id="confirmPopupWa" href="https://wa.me/212663787499" target="_blank" rel="noopener" data-fr="Envoyer sur WhatsApp" data-en="Send on WhatsApp">Envoyer sur WhatsApp</a>
     <button class="confirm-popup-btn" onclick="closeConfirmPopup()" data-fr="Fermer" data-en="Close">Fermer</button>
+  </div>
+</div>
+
+<div class="confirm-popup" id="reservationPopup" role="dialog" aria-modal="true" aria-labelledby="reservationPopupTitle" aria-describedby="reservationPopupText" aria-hidden="true">
+  <div class="confirm-popup-card" tabindex="-1">
+    <div class="confirm-popup-ico">✅</div>
+    <div class="confirm-popup-title" id="reservationPopupTitle" data-fr="Demande de réservation envoyée !" data-en="Booking request sent!">Demande de réservation envoyée !</div>
+    <p class="confirm-popup-txt" id="reservationPopupText" data-fr="Nous vous rappelons pour confirmer votre réservation. WhatsApp s'ouvre avec votre demande : appuyez sur Envoyer pour nous la transmettre." data-en="We will call you back to confirm your booking. WhatsApp opens with your request: tap Send to pass it on to us.">Nous vous rappelons pour confirmer votre réservation. WhatsApp s'ouvre avec votre demande : appuyez sur Envoyer pour nous la transmettre.</p>
+    <a class="confirm-popup-btn confirm-popup-wa" id="reservationPopupWa" href="https://wa.me/212663787499" target="_blank" rel="noopener" data-fr="Envoyer sur WhatsApp" data-en="Send on WhatsApp">Envoyer sur WhatsApp</a>
+    <button class="confirm-popup-btn" onclick="closeReservationPopup()" data-fr="Fermer" data-en="Close">Fermer</button>
   </div>
 </div>
 
@@ -662,6 +674,7 @@ function glbNav(dir) {}
 function openMenuImg(img, name) {}
 function closeMenuImg() {}
 function closeFlyingPaper() {}
+function closeReservationPopup() {}
 </script>
 
 <nav class="mob-actions" aria-label="Actions rapides">
@@ -672,6 +685,6 @@ function closeFlyingPaper() {}
 </nav>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js" integrity="sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ" crossorigin="anonymous"></script>
 <script defer src="supabase-config.js"></script>
-<script defer src="script.js?v=20261122-1"></script>
+<script defer src="script.js?v=20261123-1"></script>
 </body>
 </html>

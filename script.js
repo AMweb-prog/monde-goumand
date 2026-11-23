@@ -416,7 +416,7 @@ document.addEventListener('click', function(e) {
   if (lb && lb.classList.contains('on') && e.target === lb) closeLB();
 });
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeLB(); closeMenuImg(); closeConfirmPopup(); }
+  if (e.key === 'Escape') { closeLB(); closeMenuImg(); closeConfirmPopup(); closeReservationPopup(); }
 });
 
 function normalizeProduct(row) {
@@ -717,7 +717,34 @@ async function sendWA() {
   });
   if (result.skipped) { showToast('⚠️ Configuration Supabase manquante'); return; }
   if (result.error) { showToast('⚠️ Commande non envoyée'); return; }
+  // La commande est enregistrée (visible dans l'admin) : on prépare aussi le message WhatsApp.
+  const waUrl = buildOrderWhatsAppUrl({ fn, ln, tel, ad, orderMode, schedule, total });
+  const waBtn = document.getElementById('confirmPopupWa');
+  if (waBtn) waBtn.href = waUrl;
+  // Commande enregistrée : on vide le panier pour éviter un double envoi.
+  cart = [];
+  saveCart();
+  renderCart();
   showConfirmPopup();
+  window.open(waUrl, '_blank', 'noopener');
+}
+
+/* ── MESSAGE WHATSAPP DE LA COMMANDE ────────────────────── */
+const MG_WHATSAPP_NUMBER = '212663787499';
+function buildOrderWhatsAppUrl({ fn, ln, tel, ad, orderMode, schedule, total }) {
+  const modes = { sur_place: 'Sur place', a_emporter: 'À emporter', livraison: 'Livraison' };
+  const lines = [
+    'Bonjour Monde Gourmand, voici ma commande :',
+    '',
+    ...cart.map(i => `• ${i.qty} × ${i.name} : ${i.price * i.qty} Dh`),
+    '',
+    `Total : ${total} Dh`,
+    `Mode : ${modes[orderMode] || orderMode}`,
+    orderMode === 'livraison' ? `Adresse : ${ad}` : `Date : ${String(schedule.date).split('-').reverse().join('/')} à ${schedule.time}`,
+    `Nom : ${fn} ${ln}`,
+    `Téléphone : ${tel}`
+  ];
+  return `https://wa.me/${MG_WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
 }
 
 /* ── POP-UP DE CONFIRMATION (délai 48h) ─────────────────── */
@@ -761,7 +788,42 @@ async function sendReservationWA() {
   });
   if (result.skipped) { showToast('⚠️ Configuration Supabase manquante'); return; }
   if (result.error) { showToast('⚠️ Réservation non envoyée'); return; }
-  showToast('✓ Demande envoyée : nous vous rappelons pour confirmer');
+  // Réservation enregistrée (visible dans l'admin) : on prépare aussi le message WhatsApp.
+  const lines = [
+    'Bonjour Monde Gourmand, je souhaite réserver :',
+    '',
+    `Événement : ${type}`,
+    `Date : ${String(date).split('-').reverse().join('/')} à ${heure}`,
+    `Nombre de personnes : ${prsn}`,
+    ...(table ? [`Nombre de tables : ${table}`] : []),
+    `Nom : ${nom}`,
+    `Téléphone : ${tel}`
+  ];
+  const waUrl = `https://wa.me/${MG_WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join('\n'))}`;
+  const waBtn = document.getElementById('reservationPopupWa');
+  if (waBtn) waBtn.href = waUrl;
+  // On vide le formulaire pour éviter un double envoi.
+  ['rNom', 'rTel', 'rDate', 'rHeure', 'rPrsn', 'rTable'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+  const typeSelect = document.getElementById('rType');
+  if (typeSelect) typeSelect.selectedIndex = 0;
+  showReservationPopup();
+  window.open(waUrl, '_blank', 'noopener');
+}
+
+function showReservationPopup() {
+  const p = document.getElementById('reservationPopup');
+  if (!p) return;
+  activeDialogTrigger = document.activeElement;
+  p.classList.add('on');
+  p.setAttribute('aria-hidden', 'false');
+  p.querySelector('.confirm-popup-btn')?.focus();
+}
+function closeReservationPopup() {
+  const p = document.getElementById('reservationPopup');
+  if (!p) return;
+  p.classList.remove('on');
+  p.setAttribute('aria-hidden', 'true');
+  activeDialogTrigger?.focus?.();
 }
 renderCart();
 
