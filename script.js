@@ -63,7 +63,29 @@ function addToCart(p) {
   }
   else cart.push({ ...p, qty: 1 });
   saveCart();
-  showToast('✓  ' + p.name + ' ajouté au panier');
+  // Laisse les autres fenêtres (ex. lightbox produit) se fermer avant d'ouvrir le pop-up.
+  setTimeout(() => showCartPopup(p.name), 0);
+}
+
+/* ── POP-UP « AJOUTÉ AU PANIER » ────────────────────────── */
+function showCartPopup(name) {
+  const p = document.getElementById('cartPopup');
+  if (!p) { showToast('✓  ' + name + ' ajouté au panier'); return; }
+  const item = document.getElementById('cartPopupItem');
+  const line = cart.find(i => i.name === name);
+  if (item) item.textContent = line && line.qty > 1 ? `${name} (× ${line.qty})` : name;
+  activeDialogTrigger = document.activeElement;
+  p.classList.add('on');
+  p.setAttribute('aria-hidden', 'false');
+  // Le pop-up devient visible à l'image suivante : on y place le focus à ce moment-là.
+  setTimeout(() => p.querySelector('.cart-popup-continue')?.focus(), 50);
+}
+function closeCartPopup() {
+  const p = document.getElementById('cartPopup');
+  if (!p) return;
+  p.classList.remove('on');
+  p.setAttribute('aria-hidden', 'true');
+  activeDialogTrigger?.focus?.();
 }
 function removeFromCart(id) { cart = cart.filter(i => i.id != id); saveCart(); }
 function changeQty(id, d) {
@@ -416,7 +438,7 @@ document.addEventListener('click', function(e) {
   if (lb && lb.classList.contains('on') && e.target === lb) closeLB();
 });
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') { closeLB(); closeMenuImg(); closeConfirmPopup(); closeReservationPopup(); }
+  if (e.key === 'Escape') { closeLB(); closeMenuImg(); closeConfirmPopup(); closeReservationPopup(); closeCartPopup(); }
 });
 
 function normalizeProduct(row) {

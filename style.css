@@ -1340,3 +1340,10 @@ footer .ft-row{padding:8px 0;}
 @media (prefers-reduced-motion: reduce) { .footer-credit-heart { animation: none; } .footer-credit img { transition: none; } }
 /* Bouton WhatsApp du pop-up de confirmation */
 .confirm-popup-wa{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;background:#1f8f4e !important;border-color:#1f8f4e !important;color:#fff !important;margin-bottom:10px;}
+
+/* Pop-up « Ajouté au panier » */
+.cart-popup-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+.cart-popup-actions .confirm-popup-btn{flex:1 1 170px;display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:16px 20px;}
+.cart-popup-continue{background:transparent !important;color:var(--text) !important;border:1px solid var(--gold) !important;}
+.cart-popup-continue:hover{background:rgba(191,155,78,.1) !important;}
+#cartPopupItem{font-weight:600;color:var(--text);margin-bottom:24px;}

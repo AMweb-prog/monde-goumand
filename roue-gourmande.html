@@ -220,7 +220,7 @@ window.MG_ROUTE_PATHS = { '/': 'home', '/index.html': 'home', '/a-propos': 'abou
 }
 </script>
 
-<link rel="stylesheet" href="style.css?v=20261123-1">
+<link rel="stylesheet" href="style.css?v=20261124-1">
 <style>
 .page-section{display:none}
 .page-section.active{display:block}
@@ -255,6 +255,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="confirm-popup-txt" id="reservationPopupText" data-fr="Nous vous rappelons pour confirmer votre réservation. WhatsApp s'ouvre avec votre demande : appuyez sur Envoyer pour nous la transmettre." data-en="We will call you back to confirm your booking. WhatsApp opens with your request: tap Send to pass it on to us.">Nous vous rappelons pour confirmer votre réservation. WhatsApp s'ouvre avec votre demande : appuyez sur Envoyer pour nous la transmettre.</p>
     <a class="confirm-popup-btn confirm-popup-wa" id="reservationPopupWa" href="https://wa.me/212663787499" target="_blank" rel="noopener" data-fr="Envoyer sur WhatsApp" data-en="Send on WhatsApp">Envoyer sur WhatsApp</a>
     <button class="confirm-popup-btn" onclick="closeReservationPopup()" data-fr="Fermer" data-en="Close">Fermer</button>
+  </div>
+</div>
+
+<div class="confirm-popup" id="cartPopup" role="dialog" aria-modal="true" aria-labelledby="cartPopupTitle" aria-describedby="cartPopupItem" aria-hidden="true" onclick="if(event.target===this)closeCartPopup()">
+  <div class="confirm-popup-card" tabindex="-1">
+    <div class="confirm-popup-ico">🛒</div>
+    <div class="confirm-popup-title" id="cartPopupTitle" data-fr="Ajouté au panier" data-en="Added to cart">Ajouté au panier</div>
+    <p class="confirm-popup-txt" id="cartPopupItem"></p>
+    <div class="cart-popup-actions">
+      <button type="button" class="confirm-popup-btn cart-popup-continue" onclick="closeCartPopup()" data-fr="Continuer mes achats" data-en="Continue shopping">Continuer mes achats</button>
+      <a class="confirm-popup-btn cart-popup-view" href="/panier" data-fr="Voir mon panier" data-en="View my cart">Voir mon panier</a>
+    </div>
   </div>
 </div>
 
@@ -510,6 +522,7 @@ function openMenuImg(img, name) {}
 function closeMenuImg() {}
 function closeFlyingPaper() {}
 function closeReservationPopup() {}
+function closeCartPopup() {}
 </script>
 
 <nav class="mob-actions" aria-label="Actions rapides">
@@ -520,6 +533,6 @@ function closeReservationPopup() {}
 </nav>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.2/dist/umd/supabase.js" integrity="sha384-A97u3Qnt9GZHURO9YJZRe7VQgGUeFzcv6I1oIGnUTxQrCxnpQMwR0/G8F2zt9abZ" crossorigin="anonymous"></script>
 <script defer src="supabase-config.js"></script>
-<script defer src="script.js?v=20261123-1"></script>
+<script defer src="script.js?v=20261124-1"></script>
 </body>
 </html>
